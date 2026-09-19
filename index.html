@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Siêu Thị Tiện Ích Nam Giới Cao Cấp</title>
+    <title>Siêu Thị Tiện Ích Nam Giới Cao Cấp - Kín Đáo & An Toàn</title>
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -28,7 +28,7 @@
             padding-bottom: 70px;
         }
 
-        /* Top Header */
+        /* Top Bar */
         .top-bar {
             background: #111;
             color: #fff;
@@ -187,9 +187,10 @@
             padding: 3px 6px;
             border-radius: 3px;
             z-index: 2;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
 
-        .product-img {
+        .product-img, .product-video {
             width: 100%;
             height: 180px;
             object-fit: cover;
@@ -219,6 +220,10 @@
         .price-box {
             margin-top: auto;
             margin-bottom: 10px;
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
+            flex-wrap: wrap;
         }
 
         .current-price {
@@ -231,7 +236,6 @@
             color: #888;
             font-size: 12px;
             text-decoration: line-through;
-            margin-left: 5px;
         }
 
         .btn-buy {
@@ -253,7 +257,7 @@
             background: #e6b800;
         }
 
-        /* Section: Có thể bạn quan tâm */
+        /* Section: CÓ THỂ BẠN QUAN TÂM */
         .blog-section {
             background: #fff;
             padding: 15px;
@@ -286,6 +290,11 @@
             padding-bottom: 10px;
             border-bottom: 1px dashed #eee;
             align-items: center;
+            transition: background 0.2s;
+        }
+
+        .blog-item:hover {
+            background: #fafafa;
         }
 
         .blog-item:last-child {
@@ -293,19 +302,27 @@
         }
 
         .blog-thumb {
-            width: 80px;
-            height: 60px;
+            width: 85px;
+            height: 65px;
             object-fit: cover;
-            border-radius: 5px;
+            border-radius: 6px;
+            flex-shrink: 0;
         }
 
         .blog-info h4 {
             font-size: 13px;
             font-weight: 600;
             line-height: 1.4;
+            color: #222;
         }
 
-        /* Fixed Footer Sticky Bar */
+        .blog-info p {
+            font-size: 11px;
+            color: #666;
+            margin-top: 3px;
+        }
+
+        /* Sticky Footer */
         .sticky-zalo {
             position: fixed;
             bottom: 0;
@@ -347,7 +364,7 @@
             100% { transform: scale(1); }
         }
 
-        /* Chatbot Popup Widget */
+        /* Chatbot Widget */
         .chat-widget {
             position: fixed;
             bottom: 60px;
@@ -483,7 +500,7 @@
 
     <!-- Top Bar -->
     <div class="top-bar">
-        🔒 Bảo mật thông tin khách hàng 100% - Giao hàng kín đáo
+        🔒 Bảo mật thông tin tuyệt đối - Đóng gói kín đáo 100%
     </div>
 
     <!-- Header & Search -->
@@ -507,65 +524,72 @@
         <button class="tab-btn" onclick="filterCategory('do-choi')">Đồ Chơi Nam</button>
     </div>
 
-    <!-- Product Grid -->
+    <!-- Main Container -->
     <div class="container">
+        
+        <!-- Product Section Title -->
         <div class="section-title">
             <span>DANH SÁCH SẢN PHẨM HOT</span>
             <i class="fa-solid fa-fire"></i>
         </div>
 
+        <!-- Product Grid -->
         <div class="product-grid" id="productGrid">
 
             <!-- SP 1 -->
             <div class="product-card" data-category="cuong-duong" data-name="combo 5 hop thuoc cuong duong adenafil 100mg">
-                <span class="badge-sale">-19%</span>
+                <span class="badge-sale">-28% HOT SALE</span>
                 <img src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=500" class="product-img" alt="Thuốc Cường Dương">
                 <div class="product-info">
                     <div class="product-title">Combo 5 Hộp Thuốc Cường Dương Adenafil 100mg</div>
                     <div class="price-box">
-                        <span class="current-price">498.000đ</span>
-                        <span class="old-price">622.000đ</span>
+                        <span class="current-price">350.000đ</span>
+                        <span class="old-price">490.000đ</span>
                     </div>
                     <a href="https://zalo.me/0913553362" target="_blank" class="btn-buy">TƯ VẤN ZALO</a>
                 </div>
             </div>
 
-            <!-- SP 2 -->
-            <div class="product-card" data-category="bao-cao-su" data-name="bao cao su gan gai nhieu bi tro">
-                <span class="badge-sale">-20%</span>
-                <img src="https://images.unsplash.com/photo-1584017911766-d451b3d0e843?w=500" class="product-img" alt="Bao Cao Su">
+            <!-- SP 2 (Thẻ VIDEO CO TIENG) -->
+            <div class="product-card" data-category="do-choi" data-name="may suc tu dong cao cap co video huong dan am thanh">
+                <span class="badge-sale">-28% HOT SALE</span>
+                <!-- Thẻ video đã BỎ 'muted', giữ autoplay loop playsinline controls để phát tiếng chuẩn -->
+                <video class="product-video" autoplay loop playsinline controls poster="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=500">
+                    <source src="https://assets.mixkit.co/videos/preview/mixkit-circuit-board-details-4322-large.mp4" type="video/mp4">
+                </video>
                 <div class="product-info">
-                    <div class="product-title">Bao Cao Su Gân Gai, Nhiều Bi Tròn Tăng Khoái Cảm</div>
+                    <div class="product-title">Máy Sục Tự Động Nhiều Chế Độ (Có Video & Tiếng Hướng Dẫn)</div>
                     <div class="price-box">
-                        <span class="current-price">199.000đ</span>
-                        <span class="old-price">250.000đ</span>
+                        <span class="current-price">690.000đ</span>
+                        <span class="old-price">960.000đ</span>
                     </div>
                     <a href="https://zalo.me/0913553362" target="_blank" class="btn-buy">TƯ VẤN ZALO</a>
                 </div>
             </div>
 
             <!-- SP 3 -->
-            <div class="product-card" data-category="gel-boi-tron" data-name="gel boi tron tinh trung cao cap">
-                <span class="badge-sale">-20%</span>
-                <img src="https://images.unsplash.com/photo-1556228720-195a672e8a03?w=500" class="product-img" alt="Gel Bôi Trơn">
+            <div class="product-card" data-category="bao-cao-su" data-name="bao cao su gan gai nhieu bi tro">
+                <span class="badge-sale">-29% HOT SALE</span>
+                <img src="https://images.unsplash.com/photo-1584017911766-d451b3d0e843?w=500" class="product-img" alt="Bao Cao Su">
                 <div class="product-info">
-                    <div class="product-title">Mua 1 Tặng 1: Gel Bôi Trơn Nhật Bản Cao Cấp 200ml</div>
+                    <div class="product-title">Bao Cao Su Gân Gai Nhiều Bi Tròn Tăng Khoái Cảm</div>
                     <div class="price-box">
                         <span class="current-price">199.000đ</span>
-                        <span class="old-price">250.000đ</span>
+                        <span class="old-price">280.000đ</span>
                     </div>
                     <a href="https://zalo.me/0913553362" target="_blank" class="btn-buy">TƯ VẤN ZALO</a>
                 </div>
             </div>
 
             <!-- SP 4 -->
-            <div class="product-card" data-category="do-choi" data-name="may suc cu tu dong pin sac">
-                <span class="badge-sale">HOT</span>
-                <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=500" class="product-img" alt="Máy Sục Auto">
+            <div class="product-card" data-category="gel-boi-tron" data-name="gel boi tron tinh trung cao cap">
+                <span class="badge-sale">-29% MUA 1 TẶNG 1</span>
+                <img src="https://images.unsplash.com/photo-1556228720-195a672e8a03?w=500" class="product-img" alt="Gel Bôi Trơn">
                 <div class="product-info">
-                    <div class="product-title">Máy Sục Tự Động Nhiều Chế Độ - Cổng Sắc Pin</div>
+                    <div class="product-title">Gel Bôi Trơn Nhật Bản Gốc Nước Cao Cấp 200ml</div>
                     <div class="price-box">
-                        <span class="current-price">699.000đ</span>
+                        <span class="current-price">199.000đ</span>
+                        <span class="old-price">280.000đ</span>
                     </div>
                     <a href="https://zalo.me/0913553362" target="_blank" class="btn-buy">TƯ VẤN ZALO</a>
                 </div>
@@ -573,10 +597,10 @@
 
             <!-- SP 5 -->
             <div class="product-card" data-category="popper" data-name="popper fantasy forest 10ml">
-                <span class="badge-sale">-28%</span>
+                <span class="badge-sale">-29% HOT SALE</span>
                 <img src="https://images.unsplash.com/photo-1608248597261-e4d09123317a?w=500" class="product-img" alt="Popper">
                 <div class="product-info">
-                    <div class="product-title">Popper FANTASY FOREST 10ML Chính Hãng Tăng Hưng Phấn</div>
+                    <div class="product-title">Popper FANTASY FOREST 10ML Tăng Hưng Phấn Mạnh Mẽ</div>
                     <div class="price-box">
                         <span class="current-price">199.000đ</span>
                         <span class="old-price">280.000đ</span>
@@ -587,13 +611,13 @@
 
             <!-- SP 6 -->
             <div class="product-card" data-category="cuong-duong" data-name="gel ve sinh duong vat mat lanh">
-                <span class="badge-sale">-28%</span>
+                <span class="badge-sale">-29% HOT SALE</span>
                 <img src="https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=500" class="product-img" alt="Gel vệ sinh">
                 <div class="product-info">
                     <div class="product-title">Gel Vệ Sinh Nam Giới Bạc Hà Mát Lạnh Khử Mùi</div>
                     <div class="price-box">
                         <span class="current-price">99.000đ</span>
-                        <span class="old-price">139.000đ</span>
+                        <span class="old-price">140.000đ</span>
                     </div>
                     <a href="https://zalo.me/0913553362" target="_blank" class="btn-buy">TƯ VẤN ZALO</a>
                 </div>
@@ -601,28 +625,83 @@
 
         </div>
 
-        <!-- Section: CÓ THỂ BẠN QUAN TÂM -->
+        <!-- SECTION: CÓ THỂ BẠN QUAN TÂM (8 BÀI VIẾT CHIA SẺ & GAY TOPIC) -->
         <div class="blog-section">
             <div class="blog-title">CÓ THỂ BẠN QUAN TÂM</div>
             <div class="blog-list">
+
+                <!-- Bài 1 -->
                 <a href="https://zalo.me/0913553362" target="_blank" class="blog-item">
-                    <img src="https://images.unsplash.com/photo-1516585427167-9f4af9627e6c?w=200" class="blog-thumb" alt="Bài viết">
+                    <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=200" class="blog-thumb" alt="Vệ sinh Bottom">
                     <div class="blog-info">
-                        <h4>Mẹo Giúp Vợ Chồng Hạnh Phúc & Cải Thiện Ham Muốn Tự Nhiên</h4>
+                        <h4>1. Bí Quyết Chuẩn Bị & Vệ Sinh Cho Dân Gay (Bottom) Tự Tin 100%</h4>
+                        <p>Dụng cụ thụt rửa & gel bôi trơn chuyên dụng giúp bạn thăng hoa an toàn...</p>
                     </div>
                 </a>
+
+                <!-- Bài 2 -->
                 <a href="https://zalo.me/0913553362" target="_blank" class="blog-item">
-                    <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=200" class="blog-thumb" alt="Bài viết">
+                    <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=200" class="blog-thumb" alt="Dùng Popper">
                     <div class="blog-info">
-                        <h4>Top 8 Bí Kuyết Kéo Dài Thời Gian Quan Hệ Cho Phái Mạnh</h4>
+                        <h4>2. Lần Đầu Dùng Popper Cho Gay/Bi: Hướng Dẫn Chi Tiết Để Rung Cảm Thăng Hoa</h4>
+                        <p>Cách chọn dòng Popper dịu nhẹ, không đau đầu và tăng hưng phấn tức thì...</p>
                     </div>
                 </a>
+
+                <!-- Bài 3 -->
                 <a href="https://zalo.me/0913553362" target="_blank" class="blog-item">
-                    <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=200" class="blog-thumb" alt="Bài viết">
+                    <img src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=200" class="blog-thumb" alt="Cường dương">
                     <div class="blog-info">
-                        <h4>Hướng Dẫn Sử Dụng Gel Bôi Trơn & Bao Cao Su Đúng Cách</h4>
+                        <h4>3. Hiện Tượng "Trên Bảo Dưới Không Nghe" Ở Nam 30+ & Cách Khắc Phục Nhanh</h4>
+                        <p>Giải pháp lấy lại bản lĩnh phái mạnh an toàn, kín đáo không lo tác dụng phụ...</p>
                     </div>
                 </a>
+
+                <!-- Bài 4 -->
+                <a href="https://zalo.me/0913553362" target="_blank" class="blog-item">
+                    <img src="https://images.unsplash.com/photo-1556228720-195a672e8a03?w=200" class="blog-thumb" alt="Bảo mật">
+                    <div class="blog-info">
+                        <h4>4. Tâm Lý E Thẹn Khi Mua Đồ Chơi Người Lớn & Quy Trình Đóng Gói Kín Đáo</h4>
+                        <p>Che tên sản phẩm 100%, bọc kín mít, shipper không thể biết bên trong là gì...</p>
+                    </div>
+                </a>
+
+                <!-- Bài 5 -->
+                <a href="https://zalo.me/0913553362" target="_blank" class="blog-item">
+                    <img src="https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=200" class="blog-thumb" alt="Gel bôi trơn">
+                    <div class="blog-info">
+                        <h4>5. Tại Sao Quan Hệ Lại Bị Rát? Giải Mã Nỗi Đau Khó Nói Của Các Cặp Đôi</h4>
+                        <p>Mẹo chọn Gel bôi trơn gốc nước lành tính giúp cuộc yêu trơn tru và êm ái...</p>
+                    </div>
+                </a>
+
+                <!-- Bài 6 -->
+                <a href="https://zalo.me/0913553362" target="_blank" class="blog-item">
+                    <img src="https://images.unsplash.com/photo-1608248597261-e4d09123317a?w=200" class="blog-thumb" alt="Máy sục">
+                    <div class="blog-info">
+                        <h4>6. Top 5 Mẫu Đồ Chơi Tự Động Giải Tỏa Sinh Lý Cho Nam Giới Độc Thân</h4>
+                        <p>Giải pháp an toàn, kín đáo giúp xả stress sinh lý nhanh chóng tại nhà...</p>
+                    </div>
+                </a>
+
+                <!-- Bài 7 -->
+                <a href="https://zalo.me/0913553362" target="_blank" class="blog-item">
+                    <img src="https://images.unsplash.com/photo-1584017911766-d451b3d0e843?w=200" class="blog-thumb" alt="Kéo dài">
+                    <div class="blog-info">
+                        <h4>7. Nghệ Thuật Kéo Dài Thời Gian "Cuộc Yêu" Giúp Cả Hai Cùng Lên Đỉnh</h4>
+                        <p>Bí quyết dùng bao gân gai kết hợp xịt thảo dược kéo dài thời gian bền bỉ...</p>
+                    </div>
+                </a>
+
+                <!-- Bài 8 -->
+                <a href="https://zalo.me/0913553362" target="_blank" class="blog-item">
+                    <img src="https://images.unsplash.com/photo-1516585427167-9f4af9627e6c?w=200" class="blog-thumb" alt="Phân biệt thật giả">
+                    <div class="blog-info">
+                        <h4>8. Hướng Dẫn Phân Biệt Bao Cao Su & Gel Bôi Trơn Chính Hãng An Toàn</h4>
+                        <p>Mẹo nhận biết hàng chuẩn để bảo vệ sức khỏe sinh sản cho bản thân và đối phương...</p>
+                    </div>
+                </a>
+
             </div>
         </div>
 
