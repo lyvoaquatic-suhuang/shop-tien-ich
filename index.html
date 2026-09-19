@@ -605,13 +605,13 @@
 
             const scriptURL = 'https://script.google.com/macros/s/AKfycbwcRkl04j54oZJL2Eg_HVcYxytfw8DTmZGVv1C4UyRM6UvN5kc5a-76FKMWuCCJI3qfqA/exec';
 
-            // DÙNG URLSearchParams ĐỂ TƯƠNG THÍCH 100% VỚI GOOGLE SHEET CỦA ANH
+            // Tên khóa phải KHỚP với e.parameter.* trong Google Apps Script
             const data = new URLSearchParams();
-            data.append('Họ Và Tên', name);
-            data.append('Số ĐT', "'" + phone); 
-            data.append('Địa Chỉ', address);
-            data.append('Sản Phẩm Đặt Mua', productSummary);
-            data.append('Tổng Tiền', totalPriceVal);
+            data.append('hoTen', name);
+            data.append('soDienThoai', "'" + phone); // dấu ' để Sheet giữ số 0 đầu
+            data.append('diaChi', address);
+            data.append('sanPham', productSummary);
+            data.append('tongTien', totalPriceVal);
 
             fetch(scriptURL, { 
                 method: 'POST', 
