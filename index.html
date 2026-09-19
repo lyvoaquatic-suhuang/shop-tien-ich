@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cửa Hàng Tiện Ích & Chăm Sóc Sức Khỏe Nam Giới - Kín Đáo & Chính Hãng</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --accent-color: #38bdf8;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --btn-bg: #2563eb;
+            --btn-hover: #1d4ed8;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            padding: 30px 0;
+            border-bottom: 1px solid #334155;
+            margin-bottom: 30px;
+        }
+        header h1 {
+            font-size: 1.5rem;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+        header p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        .badge-secure {
+            display: inline-block;
+            background: #065f46;
+            color: #34d399;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            margin-top: 10px;
+            font-weight: 600;
+        }
+        .section-title {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: var(--accent-color);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            border: 1px solid #334155;
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent-color);
+        }
+        .card img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            background: #334155;
+        }
+        .card h3 {
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+        .btn-tele {
+            display: block;
+            width: 100%;
+            background-color: var(--btn-bg);
+            color: white;
+            text-align: center;
+            padding: 10px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            transition: background 0.2s;
+        }
+        .btn-tele:hover {
+            background-color: var(--btn-hover);
+        }
+        .floating-cta {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 540px;
+            background: #2563eb;
+            color: #fff;
+            text-align: center;
+            padding: 14px;
+            border-radius: 30px;
+            font-weight: bold;
+            text-decoration: none;
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.4);
+            z-index: 100;
+        }
+        footer {
+            text-align: center;
+            padding: 40px 0 80px 0;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>Shop Nam Giới Cao Cấp</h1>
+            <p>Sản phẩm chính hãng - Giao hàng siêu tốc - Che tên kín đáo 100%</p>
+            <div class="badge-secure">🔒 Bảo mật tuyệt đối thông tin khách hàng</div>
+        </header>
+
+        <!-- Danh mục sản phẩm -->
+        <div class="section-title">Danh Mục Nổi Bật</div>
+        <div class="grid">
+            <!-- Sản phẩm 1 -->
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=400" alt="Bao Cao Su">
+                <h3>Bao Cao Su Kéo Dài</h3>
+                <a href="https://t.me/TEN_TAI_KHOAN_TELEGRAM_CUA_ANH" target="_blank" class="btn-tele">Tư Vấn Ngay</a>
+            </div>
+            <!-- Sản phẩm 2 -->
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1550572017-edd951b55104?w=400" alt="Gel Bôi Trơn">
+                <h3>Gel Bôi Trơn Cao Cấp</h3>
+                <a href="https://t.me/TEN_TAI_KHOAN_TELEGRAM_CUA_ANH" target="_blank" class="btn-tele">Tư Vấn Ngay</a>
+            </div>
+            <!-- Sản phẩm 3 -->
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400" alt="Đồ Chơi">
+                <h3>Đồ Chơi Nam Giới</h3>
+                <a href="https://t.me/TEN_TAI_KHOAN_TELEGRAM_CUA_ANH" target="_blank" class="btn-tele">Tư Vấn Ngay</a>
+            </div>
+            <!-- Sản phẩm 4 -->
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1516549655169-df83a0774514?w=400" alt="Vòng Đeo">
+                <h3>Vòng Đeo Hỗ Trợ</h3>
+                <a href="https://t.me/TEN_TAI_KHOAN_TELEGRAM_CUA_ANH" target="_blank" class="btn-tele">Tư Vấn Ngay</a>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>&copy; 2026 Men Health Store. Hỗ trợ khách hàng 24/7.</p>
+        </footer>
+    </div>
+
+    <!-- Nút gọi hành động nổi phía dưới màn hình điện thoại -->
+    <a href="https://t.me/TEN_TAI_KHOAN_TELEGRAM_CUA_ANH" target="_blank" class="floating-cta">
+        💬 Nhắn Telegram Tư Vấn Kín Đáo Nhanh
+    </a>
+
+</body>
+</html>
