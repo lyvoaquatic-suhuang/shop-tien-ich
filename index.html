@@ -3,325 +3,422 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shop Nam Giới Cao Cấp - Đẳng Cấp & Riêng Tư</title>
+    <title>Siêu Thị Tiện Ích Nam Giới Cao Cấp - Kín Đáo & An Toàn</title>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --bg-color: #1a120b;
-            --card-bg: #261910;
-            --accent-gold: #c59b27;
-            --text-main: #f3efe6;
-            --text-sub: #b8a99a;
-            --red-sale: #e53935;
+            --primary-color: #ffcc00;
+            --secondary-color: #0084ff;
+            --dark-color: #222222;
+            --bg-color: #f4f5f7;
+            --red-color: #e53935;
         }
-        body {
+
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
             background-color: var(--bg-color);
-            background-image: linear-gradient(rgba(26, 18, 11, 0.9), rgba(26, 18, 11, 0.95)), url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            color: var(--text-main);
+            color: #333;
+            padding-bottom: 70px;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            background: #111;
+            color: #fff;
+            text-align: center;
+            padding: 8px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        header {
+            background: #fff;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1000px;
+            margin: 0 auto;
             display: flex;
             flex-direction: column;
+            gap: 12px;
             align-items: center;
-            min-height: 100vh;
         }
-        .container {
-            width: 100%;
-            max-width: 480px;
-            padding: 15px;
-            box-sizing: border-box;
-            padding-bottom: 80px;
-        }
-        .security-banner {
-            background-color: #000;
-            color: var(--accent-gold);
+
+        .logo-title {
+            font-size: 20px;
+            font-weight: 800;
+            color: #d32f2f;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
             text-align: center;
-            font-size: 11px;
-            padding: 6px;
-            border-bottom: 1px solid rgba(197, 155, 39, 0.3);
-            font-weight: 600;
         }
-        .header {
-            text-align: center;
-            margin: 15px 0;
-        }
-        .header h1 {
-            font-size: 22px;
-            margin: 0 0 5px 0;
-            color: var(--accent-gold);
-            font-weight: 700;
-        }
-        .header p {
-            font-size: 12px;
-            color: var(--text-sub);
-            margin: 0;
-        }
+
+        /* Search Bar */
         .search-box {
             width: 100%;
-            padding: 12px 15px;
+            max-width: 600px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 45px 12px 15px;
+            border: 2px solid var(--primary-color);
             border-radius: 25px;
-            border: 1px solid rgba(197, 155, 39, 0.4);
-            background: rgba(38, 25, 16, 0.9);
-            color: var(--text-main);
-            font-size: 14px;
             outline: none;
-            box-sizing: border-box;
-            margin-bottom: 15px;
+            font-size: 14px;
+            background: #fff;
+            color: #333;
         }
-        .search-box::placeholder {
-            color: var(--text-sub);
+
+        .search-box button {
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--primary-color);
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            color: #000;
         }
-        .filter-container {
+
+        /* Category Filter Tabs (Đủ Tất Cả + 6 Danh Mục Sát Bên) */
+        .category-tabs {
+            max-width: 1000px;
+            margin: 15px auto 5px;
+            padding: 0 10px;
             display: flex;
             gap: 8px;
             overflow-x: auto;
-            padding-bottom: 10px;
-            margin-bottom: 15px;
+            white-space: nowrap;
             scrollbar-width: none;
         }
-        .filter-container::-webkit-scrollbar {
-            display: none;
-        }
-        .filter-btn {
-            background: var(--card-bg);
-            color: var(--text-sub);
-            border: 1px solid rgba(197, 155, 39, 0.2);
-            padding: 6px 14px;
+
+        .category-tabs::-webkit-scrollbar { display: none; }
+
+        .tab-btn {
+            padding: 8px 16px;
+            background: #fff;
+            border: 1px solid #ddd;
             border-radius: 20px;
-            font-size: 12px;
-            white-space: nowrap;
+            font-size: 13px;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
         }
-        .filter-btn.active, .filter-btn:hover {
-            background: var(--accent-gold);
-            color: #1a120b;
-            font-weight: 600;
-            border-color: var(--accent-gold);
+
+        .tab-btn.active, .tab-btn:hover {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            color: #000;
         }
+
+        /* Product Section */
+        .container {
+            max-width: 1000px;
+            margin: 15px auto;
+            padding: 0 10px;
+        }
+
         .section-title {
-            font-size: 13px;
+            background: var(--primary-color);
+            color: #000;
+            padding: 10px 15px;
+            font-size: 15px;
+            font-weight: bold;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--accent-gold);
-            margin-bottom: 12px;
-            font-weight: 600;
+            border-radius: 5px 5px 0 0;
+            margin-bottom: 15px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
         }
+
         .product-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
         }
+
+        @media (min-width: 768px) {
+            .product-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 15px;
+            }
+        }
+
         .product-card {
-            background-color: var(--card-bg);
-            border: 1px solid rgba(197, 155, 39, 0.2);
-            border-radius: 10px;
+            background: #fff;
+            border-radius: 8px;
             overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            transition: transform 0.2s;
             position: relative;
         }
-        .product-img {
-            width: 100%;
-            height: 120px;
-            object-fit: cover;
+
+        .product-card:hover {
+            transform: translateY(-3px);
         }
-        .product-badge {
+
+        .badge-sale {
             position: absolute;
             top: 8px;
             left: 8px;
-            background: var(--red-sale);
-            color: white;
-            font-size: 9px;
-            padding: 2px 6px;
-            border-radius: 4px;
+            background: var(--red-color);
+            color: #fff;
+            font-size: 11px;
             font-weight: bold;
+            padding: 3px 6px;
+            border-radius: 3px;
+            z-index: 2;
         }
-        .product-body {
+
+        .product-img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            background: #eee;
+        }
+
+        .product-info {
             padding: 10px;
             display: flex;
             flex-direction: column;
             flex-grow: 1;
-            justify-content: space-between;
         }
-        .product-name {
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--text-main);
+
+        .product-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #222;
             margin-bottom: 8px;
             line-height: 1.3;
+            height: 34px;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
         }
-        .product-price-box {
-            margin-bottom: 8px;
+
+        .price-box {
+            margin-top: auto;
+            margin-bottom: 10px;
         }
-        .price-new {
-            color: #ffca28;
-            font-size: 13px;
+
+        .current-price {
+            color: var(--red-color);
+            font-size: 15px;
             font-weight: bold;
         }
-        .price-old {
-            color: var(--text-sub);
-            font-size: 10px;
+
+        .old-price {
+            color: #888;
+            font-size: 11px;
             text-decoration: line-through;
             margin-left: 5px;
         }
+
         .btn-buy {
-            background: linear-gradient(135deg, #ffc107, #ffa000);
-            color: #1a120b;
-            border: none;
-            padding: 7px;
-            border-radius: 5px;
-            font-size: 11px;
-            font-weight: bold;
-            cursor: pointer;
+            display: block;
             width: 100%;
+            background: var(--primary-color);
+            color: #000;
             text-align: center;
+            padding: 9px 0;
+            font-weight: bold;
+            font-size: 12px;
+            text-decoration: none;
+            border-radius: 5px;
+            text-transform: uppercase;
+            cursor: pointer;
+            border: none;
+            transition: background 0.2s;
         }
-        .floating-cart {
+
+        .btn-buy:hover {
+            background: #e6b800;
+        }
+
+        /* Sticky Footer Zalo */
+        .sticky-zalo {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: #0068ff;
-            color: white;
-            padding: 12px 18px;
-            border-radius: 30px;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #ffffff;
+            border-top: 1px solid #ddd;
+            padding: 8px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            z-index: 99;
+        }
+
+        .sticky-zalo-text {
+            font-size: 12px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .btn-zalo-now {
+            background: var(--secondary-color);
+            color: #fff;
+            padding: 8px 15px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 13px;
             display: flex;
             align-items: center;
-            gap: 8px;
-            box-shadow: 0 4px 15px rgba(0, 104, 255, 0.4);
-            text-decoration: none;
-            font-size: 13px;
-            font-weight: bold;
-            z-index: 100;
+            gap: 6px;
         }
-        /* Modal Giỏ Hàng */
+
+        /* Modal Đặt Hàng */
         .modal {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.6);
             justify-content: center;
             align-items: center;
             z-index: 1000;
         }
         .modal-content {
-            background: var(--card-bg);
-            border: 1px solid var(--accent-gold);
+            background: #fff;
             width: 90%;
-            max-width: 400px;
+            max-width: 380px;
             padding: 20px;
-            border-radius: 12px;
-            box-sizing: border-box;
-            color: var(--text-main);
-            max-height: 90vh;
-            overflow-y: auto;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
         }
         .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            padding-bottom: 10px;
-            margin-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 8px;
+            margin-bottom: 12px;
             font-weight: bold;
-            color: var(--accent-gold);
+            color: #d32f2f;
+            font-size: 14px;
         }
         .close-modal {
             cursor: pointer;
             font-size: 18px;
-            color: var(--text-sub);
+            color: #888;
         }
         .form-group {
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
         .form-group label {
             display: block;
-            font-size: 11px;
-            color: var(--text-sub);
-            margin-bottom: 4px;
+            font-size: 12px;
+            color: #555;
+            margin-bottom: 3px;
+            font-weight: 600;
         }
         .form-control {
             width: 100%;
-            padding: 10px;
-            border-radius: 6px;
-            border: 1px solid rgba(197, 155, 39, 0.3);
-            background: #1a120b;
-            color: white;
-            box-sizing: border-box;
+            padding: 9px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
             font-size: 13px;
             outline: none;
         }
         .btn-submit {
-            background: #ffc107;
-            color: #1a120b;
+            background: var(--primary-color);
+            color: #000;
             font-weight: bold;
             width: 100%;
-            padding: 12px;
+            padding: 10px;
             border: none;
-            border-radius: 6px;
+            border-radius: 5px;
             cursor: pointer;
-            margin-top: 10px;
-            font-size: 14px;
+            margin-top: 8px;
+            font-size: 13px;
+            text-transform: uppercase;
         }
     </style>
 </head>
 <body>
 
-    <div class="security-banner">
-        🔒 Bảo mật tuyệt đối thông tin - Đóng gói kín đáo 100%
+    <!-- Top Bar -->
+    <div class="top-bar">
+        🔒 Bảo mật thông tin tuyệt đối - Đóng gói kín đáo 100%
     </div>
 
+    <!-- Header & Search -->
+    <header>
+        <div class="header-content">
+            <div class="logo-title">SIÊU THỊ TIỆN ÍCH NAM GIỚI</div>
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Nhập tên sản phẩm cần tìm..." onkeyup="filterProducts()">
+                <button><i class="fa-solid fa-magnifying-glass"></i></button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 6 Danh Mục Lọc Nhanh + Tất Cả -->
+    <div class="category-tabs">
+        <button class="tab-btn active" onclick="setCategory('all')">Tất cả</button>
+        <button class="tab-btn" onclick="setCategory('cuong-cung')">Cương Cứng Nam</button>
+        <button class="tab-btn" onclick="setCategory('popper')">Tinh Dầu Popper</button>
+        <button class="tab-btn" onclick="setCategory('bao-cao-su')">Bao Cao Su</button>
+        <button class="tab-btn" onclick="setCategory('gel-boi-tron')">Gel Bôi Trơn</button>
+        <button class="tab-btn" onclick="setCategory('do-choi')">Đồ Chơi Nam</button>
+        <button class="tab-btn" onclick="setCategory('vong-deo')">Vòng Đeo Hỗ Trợ</button>
+    </div>
+
+    <!-- Main Container -->
     <div class="container">
-        <div class="header">
-            <h1>SHOP NAM GIỚI CAO CẤP</h1>
-            <p>Sản phẩm chính hãng – Giao hàng siêu tốc</p>
-        </div>
-
-        <!-- Ô Tìm Kiếm -->
-        <input type="text" id="searchInput" class="search-box" placeholder="Nhập tên sản phẩm cần tìm..." onkeyup="filterProducts()">
-
-        <!-- 6 Danh Mục Lọc Nhanh -->
-        <div class="filter-container">
-            <button class="filter-btn active" onclick="setCategory('all')">Tất cả</button>
-            <button class="filter-btn" onclick="setCategory('cuong-cung')">Cương Cứng Nam</button>
-            <button class="filter-btn" onclick="setCategory('popper')">Tinh Dầu Popper</button>
-            <button class="filter-btn" onclick="setCategory('bao-cao-su')">Bao Cao Su</button>
-            <button class="filter-btn" onclick="setCategory('gel-boi-tron')">Gel Bôi Trơn</button>
-            <button class="filter-btn" onclick="setCategory('do-choi')">Đồ Chơi Nam</button>
-            <button class="filter-btn" onclick="setCategory('vong-deo')">Vòng Đeo Hỗ Trợ</button>
-        </div>
-
         <div class="section-title">
-            <span>Danh Sách Sản Phẩm</span>
-            <span id="productCount" style="font-size: 11px; color: var(--text-sub);"></span>
+            <span>DANH SÁCH TẤT CẢ SẢN PHẨM</span>
+            <span id="productCount" style="font-size: 12px;"></span>
         </div>
 
-        <!-- Khung Hiển Thị Sản Phẩm -->
-        <div id="productGrid" class="product-grid">
-            <!-- Sản phẩm sẽ được render tự động qua JavaScript -->
+        <!-- Product Grid Hiển Thị Toàn Bộ -->
+        <div class="product-grid" id="productGrid">
+            <!-- Render tự động qua JS -->
         </div>
     </div>
 
-    <!-- Nút Nổi Zalo / Mở Giỏ Hàng -->
-    <a href="https://zalo.me/0913553362" target="_blank" class="floating-cart">
-        💬 CHAT ZALO NGAY (<span id="cartCount">0</span>)
-    </a>
+    <!-- Sticky Bottom Zalo Bar -->
+    <div class="sticky-zalo">
+        <div class="sticky-zalo-text">
+            📞 Tư vấn bí mật & Giao siêu tốc:
+        </div>
+        <a href="https://zalo.me/0913553362" target="_blank" class="btn-zalo-now">
+            <i class="fa-solid fa-comment-dots"></i> CHAT ZALO NGAY
+        </a>
+    </div>
 
-    <!-- Modal Nhập Thông Tin Đặt Hàng -->
+    <!-- Modal Đặt Hàng -->
     <div id="checkoutModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
                 <span>XÁC NHẬN ĐẶT HÀNG KÍN ĐÁO</span>
                 <span class="close-modal" onclick="closeModal()">&times;</span>
             </div>
-            <div id="modalProductInfo" style="font-size: 12px; margin-bottom: 12px; color: var(--text-sub);"></div>
+            <div id="modalProductInfo" style="font-size: 12px; margin-bottom: 10px; color: #555; font-weight: 600;"></div>
             <form id="orderForm" onsubmit="submitOrder(event)">
                 <div class="form-group">
                     <label>Họ và Tên</label>
@@ -333,15 +430,15 @@
                 </div>
                 <div class="form-group">
                     <label>Địa Chỉ Nhận Hàng (Che tên kín đáo)</label>
-                    <textarea id="cusAddress" class="form-control" rows="2" required placeholder="Số nhà, tên đường, phường/xã..."></textarea>
+                    <textarea id="cusAddress" class="form-control" rows="2" required placeholder="Số nhà, đường, phường/xã..."></textarea>
                 </div>
                 <button type="submit" class="btn-submit">XÁC NHẬN ĐẶT MUA</button>
             </form>
         </div>
     </div>
 
+    <!-- JS Logic -->
     <script>
-        // Dữ liệu mẫu đủ 6 danh mục không bị sót
         const products = [
             { id: 1, name: "Combo 5 Hộp Thuốc Cương Cứng Adenafil", category: "cuong-cung", price: 350000, oldPrice: 490000, badge: "-28% HOT", img: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=300&q=80" },
             { id: 2, name: "Viên Uống Hỗ Trợ Cương Cứng Cấp Tốc", category: "cuong-cung", price: 250000, oldPrice: 350000, badge: "HOT", img: "https://images.unsplash.com/photo-1471864190281-a93a3070b6de?auto=format&fit=crop&w=300&q=80" },
@@ -368,13 +465,13 @@
             list.forEach(p => {
                 grid.innerHTML += `
                     <div class="product-card">
-                        ${p.badge ? `<div class="product-badge">${p.badge}</div>` : ''}
+                        ${p.badge ? `<div class="badge-sale">${p.badge}</div>` : ''}
                         <img src="${p.img}" class="product-img" alt="${p.name}">
-                        <div class="product-body">
-                            <div class="product-name">${p.name}</div>
-                            <div class="product-price-box">
-                                <span class="price-new">${p.price.toLocaleString()}đ</span>
-                                <span class="price-old">${p.oldPrice.toLocaleString()}đ</span>
+                        <div class="product-info">
+                            <div class="product-title">${p.name}</div>
+                            <div class="price-box">
+                                <span class="current-price">${p.price.toLocaleString()}đ</span>
+                                <span class="old-price">${p.oldPrice.toLocaleString()}đ</span>
                             </div>
                             <button class="btn-buy" onclick="openCheckout(${p.id})">MUA SẢN PHẨM</button>
                         </div>
@@ -385,7 +482,7 @@
 
         function setCategory(cat) {
             currentCategory = cat;
-            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
             filterProducts();
         }
@@ -413,15 +510,15 @@
         function submitOrder(e) {
             e.preventDefault();
             const name = document.getElementById('cusName').value;
-            const phone = document.getElementById('cusPhone').value; // Đã hỗ trợ type="tel" không mất số 0
+            const phone = document.getElementById('cusPhone').value;
             const address = document.getElementById('cusAddress').value;
 
-            // Link Google Sheet Web App của anh
-            const scriptURL = 'https://script.google.com/macros/s/AKfycbzQ7zP19q53JbQ2VlH0G4b_qWzR08f3uV91b5C8X0eF1vK4A2l9/exec'; // Thay link Apps Script của anh vào đây nếu cần
+            // Link Google Sheet Apps Script của anh
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbzQ7zP19q53JbQ2VlH0G4b_qWzR08f3uV91b5C8X0eF1vK4A2l9/exec';
 
             const formData = new FormData();
             formData.append('Họ Và Tên', name);
-            formData.append('Số ĐT', `'` + phone); // Giữ chặt số 0 đầu
+            formData.append('Số ĐT', `'` + phone); // Chống mất số 0 đầu
             formData.append('Địa Chỉ', address);
             formData.append('Sản Phẩm Đặt Mua', selectedProduct.name);
             formData.append('Tổng Tiền', selectedProduct.price.toLocaleString() + 'đ');
@@ -433,13 +530,12 @@
                     document.getElementById('orderForm').reset();
                 })
                 .catch(error => {
-                    // Fallback chuyển trực tiếp qua Zalo kèm thông tin nếu lỗi mạng
                     const zaloMsg = encodeURIComponent(`Chào anh, tôi muốn mua: ${selectedProduct.name} - Giá: ${selectedProduct.price.toLocaleString()}đ. Tên: ${name}, SĐT: ${phone}, Địa chỉ: ${address}`);
                     window.location.href = `https://zalo.me/0913553362?text=${zaloMsg}`;
                 });
         }
 
-        // Khởi chạy ban đầu
+        // Khởi chạy
         renderProducts(products);
     </script>
 </body>
