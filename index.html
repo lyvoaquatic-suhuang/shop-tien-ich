@@ -3,238 +3,751 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shop Nam Giới Cao Cấp - Đẳng Cấp & Riêng Tư</title>
+    <title>Siêu Thị Tiện Ích Nam Giới Cao Cấp</title>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --bg-color: #1a120b; /* Tone nền gỗ trầm tối nam tính */
-            --card-bg: #261910;  /* Màu khung gỗ ấm */
-            --accent-gold: #c59b27; /* Màu vàng đồng sang trọng */
-            --text-main: #f3efe6;
-            --text-sub: #b8a99a;
+            --primary-color: #ffcc00;
+            --secondary-color: #0084ff;
+            --dark-color: #222222;
+            --bg-color: #f4f5f7;
+            --red-color: #e53935;
         }
-        body {
+
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
             background-color: var(--bg-color);
-            background-image: linear-gradient(rgba(26, 18, 11, 0.85), rgba(26, 18, 11, 0.95)), url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80'); /* Phông nền không gian ấm áp, sang trọng */
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            color: var(--text-main);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
+            color: #333;
+            padding-bottom: 70px;
         }
-        .container {
-            width: 100%;
-            max-width: 480px;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-        .header {
+
+        /* Top Header */
+        .top-bar {
+            background: #111;
+            color: #fff;
             text-align: center;
-            margin-bottom: 25px;
-            padding-top: 10px;
-        }
-        .header h1 {
-            font-size: 24px;
-            margin: 0 0 8px 0;
-            color: var(--accent-gold);
-            font-weight: 700;
-            letter-spacing: 0.5px;
-        }
-        .header p {
+            padding: 8px;
             font-size: 13px;
-            color: var(--text-sub);
-            margin: 0;
+            font-weight: bold;
         }
-        .badge-secure {
-            display: inline-block;
-            background: rgba(197, 155, 39, 0.15);
-            color: var(--accent-gold);
-            font-size: 11px;
-            padding: 4px 12px;
-            border-radius: 20px;
-            margin-top: 10px;
-            border: 1px solid rgba(197, 155, 39, 0.3);
+
+        header {
+            background: #fff;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
-        .section-title {
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--accent-gold);
-            margin-bottom: 15px;
-            font-weight: 600;
-        }
-        .grid-menu {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 25px;
-        }
-        .card {
-            background-color: var(--card-bg);
-            border: 1px solid rgba(197, 155, 39, 0.2);
-            border-radius: 12px;
-            overflow: hidden;
+
+        .header-content {
+            max-width: 1000px;
+            margin: 0 auto;
             display: flex;
             flex-direction: column;
-            transition: transform 0.2s ease, border-color 0.2s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            gap: 12px;
+            align-items: center;
         }
-        .card:hover {
-            transform: translateY(-2px);
-            border-color: var(--accent-gold);
-        }
-        .card-img {
-            width: 100%;
-            height: 110px;
-            object-fit: cover;
-            border-bottom: 1px solid rgba(197, 155, 39, 0.1);
-        }
-        .card-body {
-            padding: 10px;
+
+        .logo-title {
+            font-size: 20px;
+            font-weight: 800;
+            color: #d32f2f;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
             text-align: center;
+        }
+
+        /* Search Bar */
+        .search-box {
+            width: 100%;
+            max-width: 600px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 45px 12px 15px;
+            border: 2px solid var(--primary-color);
+            border-radius: 25px;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .search-box button {
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--primary-color);
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            color: #000;
+        }
+
+        /* Category Filter Tabs */
+        .category-tabs {
+            max-width: 1000px;
+            margin: 15px auto 5px;
+            padding: 0 10px;
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            white-space: nowrap;
+            scrollbar-width: none;
+        }
+
+        .category-tabs::-webkit-scrollbar { display: none; }
+
+        .tab-btn {
+            padding: 8px 16px;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active, .tab-btn:hover {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            color: #000;
+        }
+
+        /* Product Section */
+        .container {
+            max-width: 1000px;
+            margin: 15px auto;
+            padding: 0 10px;
+        }
+
+        .section-title {
+            background: var(--primary-color);
+            color: #000;
+            padding: 10px 15px;
+            font-size: 16px;
+            font-weight: bold;
+            text-transform: uppercase;
+            border-radius: 5px 5px 0 0;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        @media (min-width: 768px) {
+            .product-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 15px;
+            }
+        }
+
+        .product-card {
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.2s;
+            position: relative;
+        }
+
+        .product-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .badge-sale {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background: var(--red-color);
+            color: #fff;
+            font-size: 11px;
+            font-weight: bold;
+            padding: 3px 6px;
+            border-radius: 3px;
+            z-index: 2;
+        }
+
+        .product-img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            background: #eee;
+        }
+
+        .product-info {
+            padding: 10px;
             display: flex;
             flex-direction: column;
             flex-grow: 1;
-            justify-content: space-between;
         }
-        .card-title {
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--text-main);
-            margin-bottom: 10px;
+
+        .product-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #222;
+            margin-bottom: 8px;
             line-height: 1.3;
+            height: 36px;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
         }
-        .btn-consult {
-            background: linear-gradient(135deg, #2072e7, #135bc3);
-            color: #ffffff;
-            text-decoration: none;
-            font-size: 11px;
-            font-weight: 600;
-            padding: 7px 0;
-            border-radius: 6px;
+
+        .price-box {
+            margin-top: auto;
+            margin-bottom: 10px;
+        }
+
+        .current-price {
+            color: var(--red-color);
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .old-price {
+            color: #888;
+            font-size: 12px;
+            text-decoration: line-through;
+            margin-left: 5px;
+        }
+
+        .btn-buy {
             display: block;
             width: 100%;
-            box-sizing: border-box;
-            transition: opacity 0.2s;
-        }
-        .btn-consult:hover {
-            opacity: 0.9;
-        }
-        .zalo-main-btn {
-            background: linear-gradient(135deg, #0068ff, #0050cc);
-            color: #ffffff;
-            text-decoration: none;
-            font-size: 14px;
+            background: var(--primary-color);
+            color: #000;
+            text-align: center;
+            padding: 10px 0;
             font-weight: bold;
-            padding: 14px;
-            border-radius: 30px;
+            font-size: 13px;
+            text-decoration: none;
+            border-radius: 5px;
+            text-transform: uppercase;
+            transition: background 0.2s;
+        }
+
+        .btn-buy:hover {
+            background: #e6b800;
+        }
+
+        /* Section: Có thể bạn quan tâm */
+        .blog-section {
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .blog-title {
+            background: var(--primary-color);
+            padding: 10px 15px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin: -15px -15px 15px -15px;
+            border-radius: 8px 8px 0 0;
+            font-size: 15px;
+        }
+
+        .blog-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .blog-item {
+            display: flex;
+            gap: 12px;
+            text-decoration: none;
+            color: #333;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #eee;
+            align-items: center;
+        }
+
+        .blog-item:last-child {
+            border-bottom: none;
+        }
+
+        .blog-thumb {
+            width: 80px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .blog-info h4 {
+            font-size: 13px;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        /* Fixed Footer Sticky Bar */
+        .sticky-zalo {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #ffffff;
+            border-top: 1px solid #ddd;
+            padding: 8px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            z-index: 99;
+        }
+
+        .sticky-zalo-text {
+            font-size: 12px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .btn-zalo-now {
+            background: var(--secondary-color);
+            color: #fff;
+            padding: 8px 15px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* Chatbot Popup Widget */
+        .chat-widget {
+            position: fixed;
+            bottom: 60px;
+            right: 15px;
+            z-index: 1000;
+        }
+
+        .chat-btn {
+            width: 55px;
+            height: 55px;
+            background: #0084ff;
+            color: #fff;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            position: relative;
+        }
+
+        .chat-badge {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            background: red;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .chat-box {
+            display: none;
+            position: absolute;
+            bottom: 65px;
+            right: 0;
+            width: 310px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.25);
+            overflow: hidden;
+            flex-direction: column;
+            border: 1px solid #eee;
+        }
+
+        .chat-header {
+            background: #0084ff;
+            color: #fff;
+            padding: 12px;
+            font-weight: bold;
+            font-size: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-body {
+            padding: 12px;
+            height: 250px;
+            overflow-y: auto;
+            background: #f9f9f9;
+            display: flex;
+            flex-direction: column;
             gap: 10px;
-            box-shadow: 0 4px 20px rgba(0, 104, 255, 0.4);
-            margin-top: 10px;
-            transition: transform 0.2s;
-            border: 1px solid rgba(255,255,255,0.2);
         }
-        .zalo-main-btn:hover {
-            transform: scale(1.02);
+
+        .msg {
+            max-width: 85%;
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-size: 13px;
+            line-height: 1.4;
         }
-        .footer {
+
+        .msg.bot {
+            background: #e4e6eb;
+            color: #000;
+            align-self: flex-start;
+        }
+
+        .msg.user {
+            background: #0084ff;
+            color: #fff;
+            align-self: flex-end;
+        }
+
+        .chat-options {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-top: 5px;
+        }
+
+        .option-btn {
+            background: #fff;
+            border: 1px solid #0084ff;
+            color: #0084ff;
+            padding: 6px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s;
+        }
+
+        .option-btn:hover {
+            background: #0084ff;
+            color: #fff;
+        }
+
+        .zalo-direct-link {
+            display: inline-block;
+            background: #0084ff;
+            color: #fff !important;
+            padding: 8px 12px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 5px;
+            font-size: 12px;
             text-align: center;
-            font-size: 11px;
-            color: var(--text-sub);
-            margin-top: 30px;
-            padding-bottom: 20px;
-            border-top: 1px solid rgba(255,255,255,0.05);
-            padding-top: 15px;
         }
     </style>
 </head>
 <body>
 
+    <!-- Top Bar -->
+    <div class="top-bar">
+        🔒 Bảo mật thông tin khách hàng 100% - Giao hàng kín đáo
+    </div>
+
+    <!-- Header & Search -->
+    <header>
+        <div class="header-content">
+            <div class="logo-title">SIÊU THỊ TIỆN ÍCH NAM GIỚI</div>
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Nhập tên sản phẩm cần tìm..." onkeyup="filterProducts()">
+                <button><i class="fa-solid fa-magnifying-glass"></i></button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Category Filter Tabs -->
+    <div class="category-tabs">
+        <button class="tab-btn active" onclick="filterCategory('all')">Tất cả</button>
+        <button class="tab-btn" onclick="filterCategory('cuong-duong')">Cường Cứng Nam</button>
+        <button class="tab-btn" onclick="filterCategory('bao-cao-su')">Bao Cao Su</button>
+        <button class="tab-btn" onclick="filterCategory('gel-boi-tron')">Gel Bôi Trơn</button>
+        <button class="tab-btn" onclick="filterCategory('popper')">Popper & Xịt</button>
+        <button class="tab-btn" onclick="filterCategory('do-choi')">Đồ Chơi Nam</button>
+    </div>
+
+    <!-- Product Grid -->
     <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <h1>Shop Nam Giới Cao Cấp</h1>
-            <p>Sản phẩm chính hãng – Giao hàng siêu tốc – Che tên kín đáo 100%</p>
-            <div class="badge-secure">🔒 Bảo mật tuyệt đối thông tin khách hàng</div>
+        <div class="section-title">
+            <span>DANH SÁCH SẢN PHẨM HOT</span>
+            <i class="fa-solid fa-fire"></i>
         </div>
 
-        <!-- Danh Mục Nổi Bật 6 Nhóm -->
-        <div class="section-title">Danh Mục Sản Phẩm</div>
-        
-        <div class="grid-menu">
-            <!-- Nhóm 1 -->
-            <div class="card">
-                <img src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=300&q=80" alt="Thực Phẩm Cương Cứng" class="card-img">
-                <div class="card-body">
-                    <div class="card-title">Cương Cứng Nam Giới</div>
-                    <a href="https://zalo.me/0913553362" class="btn-consult">Tư Vấn Ngay</a>
+        <div class="product-grid" id="productGrid">
+
+            <!-- SP 1 -->
+            <div class="product-card" data-category="cuong-duong" data-name="combo 5 hop thuoc cuong duong adenafil 100mg">
+                <span class="badge-sale">-19%</span>
+                <img src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=500" class="product-img" alt="Thuốc Cường Dương">
+                <div class="product-info">
+                    <div class="product-title">Combo 5 Hộp Thuốc Cường Dương Adenafil 100mg</div>
+                    <div class="price-box">
+                        <span class="current-price">498.000đ</span>
+                        <span class="old-price">622.000đ</span>
+                    </div>
+                    <a href="https://zalo.me/0913553362" target="_blank" class="btn-buy">TƯ VẤN ZALO</a>
                 </div>
             </div>
 
-            <!-- Nhóm 2 -->
-            <div class="card">
-                <img src="https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?auto=format&fit=crop&w=300&q=80" alt="Tinh Dầu Thông Mũi" class="card-img">
-                <div class="card-body">
-                    <div class="card-title">Tinh Dầu Thông Mũi</div>
-                    <a href="https://zalo.me/0913553362" class="btn-consult">Tư Vấn Ngay</a>
+            <!-- SP 2 -->
+            <div class="product-card" data-category="bao-cao-su" data-name="bao cao su gan gai nhieu bi tro">
+                <span class="badge-sale">-20%</span>
+                <img src="https://images.unsplash.com/photo-1584017911766-d451b3d0e843?w=500" class="product-img" alt="Bao Cao Su">
+                <div class="product-info">
+                    <div class="product-title">Bao Cao Su Gân Gai, Nhiều Bi Tròn Tăng Khoái Cảm</div>
+                    <div class="price-box">
+                        <span class="current-price">199.000đ</span>
+                        <span class="old-price">250.000đ</span>
+                    </div>
+                    <a href="https://zalo.me/0913553362" target="_blank" class="btn-buy">TƯ VẤN ZALO</a>
                 </div>
             </div>
 
-            <!-- Nhóm 3 -->
-            <div class="card">
-                <img src="https://images.unsplash.com/photo-1555685812-4b943f1cb0eb?auto=format&fit=crop&w=300&q=80" alt="Bao Cao Su" class="card-img">
-                <div class="card-body">
-                    <div class="card-title">Bao Cao Su Kéo Dài</div>
-                    <a href="https://zalo.me/0913553362" class="btn-consult">Tư Vấn Ngay</a>
+            <!-- SP 3 -->
+            <div class="product-card" data-category="gel-boi-tron" data-name="gel boi tron tinh trung cao cap">
+                <span class="badge-sale">-20%</span>
+                <img src="https://images.unsplash.com/photo-1556228720-195a672e8a03?w=500" class="product-img" alt="Gel Bôi Trơn">
+                <div class="product-info">
+                    <div class="product-title">Mua 1 Tặng 1: Gel Bôi Trơn Nhật Bản Cao Cấp 200ml</div>
+                    <div class="price-box">
+                        <span class="current-price">199.000đ</span>
+                        <span class="old-price">250.000đ</span>
+                    </div>
+                    <a href="https://zalo.me/0913553362" target="_blank" class="btn-buy">TƯ VẤN ZALO</a>
                 </div>
             </div>
 
-            <!-- Nhóm 4 -->
-            <div class="card">
-                <img src="https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=300&q=80" alt="Gel Bôi Trơn" class="card-img">
-                <div class="card-body">
-                    <div class="card-title">Gel Bôi Trơn Cao Cấp</div>
-                    <a href="https://zalo.me/0913553362" class="btn-consult">Tư Vấn Ngay</a>
+            <!-- SP 4 -->
+            <div class="product-card" data-category="do-choi" data-name="may suc cu tu dong pin sac">
+                <span class="badge-sale">HOT</span>
+                <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=500" class="product-img" alt="Máy Sục Auto">
+                <div class="product-info">
+                    <div class="product-title">Máy Sục Tự Động Nhiều Chế Độ - Cổng Sắc Pin</div>
+                    <div class="price-box">
+                        <span class="current-price">699.000đ</span>
+                    </div>
+                    <a href="https://zalo.me/0913553362" target="_blank" class="btn-buy">TƯ VẤN ZALO</a>
                 </div>
             </div>
 
-            <!-- Nhóm 5 -->
-            <div class="card">
-                <img src="https://images.unsplash.com/photo-1583912267670-6575cb47231f?auto=format&fit=crop&w=300&q=80" alt="Đồ Chơi Nam Giới" class="card-img">
-                <div class="card-body">
-                    <div class="card-title">Đồ Chơi Nam Giới</div>
-                    <a href="https://zalo.me/0913553362" class="btn-consult">Tư Vấn Ngay</a>
+            <!-- SP 5 -->
+            <div class="product-card" data-category="popper" data-name="popper fantasy forest 10ml">
+                <span class="badge-sale">-28%</span>
+                <img src="https://images.unsplash.com/photo-1608248597261-e4d09123317a?w=500" class="product-img" alt="Popper">
+                <div class="product-info">
+                    <div class="product-title">Popper FANTASY FOREST 10ML Chính Hãng Tăng Hưng Phấn</div>
+                    <div class="price-box">
+                        <span class="current-price">199.000đ</span>
+                        <span class="old-price">280.000đ</span>
+                    </div>
+                    <a href="https://zalo.me/0913553362" target="_blank" class="btn-buy">TƯ VẤN ZALO</a>
                 </div>
             </div>
 
-            <!-- Nhóm 6 -->
-            <div class="card">
-                <img src="https://images.unsplash.com/photo-1516574187841-cb9cc2ca948b?auto=format&fit=crop&w=300&q=80" alt="Vòng Đeo Hỗ Trợ" class="card-img">
-                <div class="card-body">
-                    <div class="card-title">Vòng Đeo Hỗ Trợ</div>
-                    <a href="https://zalo.me/0913553362" class="btn-consult">Tư Vấn Ngay</a>
+            <!-- SP 6 -->
+            <div class="product-card" data-category="cuong-duong" data-name="gel ve sinh duong vat mat lanh">
+                <span class="badge-sale">-28%</span>
+                <img src="https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=500" class="product-img" alt="Gel vệ sinh">
+                <div class="product-info">
+                    <div class="product-title">Gel Vệ Sinh Nam Giới Bạc Hà Mát Lạnh Khử Mùi</div>
+                    <div class="price-box">
+                        <span class="current-price">99.000đ</span>
+                        <span class="old-price">139.000đ</span>
+                    </div>
+                    <a href="https://zalo.me/0913553362" target="_blank" class="btn-buy">TƯ VẤN ZALO</a>
                 </div>
+            </div>
+
+        </div>
+
+        <!-- Section: CÓ THỂ BẠN QUAN TÂM -->
+        <div class="blog-section">
+            <div class="blog-title">CÓ THỂ BẠN QUAN TÂM</div>
+            <div class="blog-list">
+                <a href="https://zalo.me/0913553362" target="_blank" class="blog-item">
+                    <img src="https://images.unsplash.com/photo-1516585427167-9f4af9627e6c?w=200" class="blog-thumb" alt="Bài viết">
+                    <div class="blog-info">
+                        <h4>Mẹo Giúp Vợ Chồng Hạnh Phúc & Cải Thiện Ham Muốn Tự Nhiên</h4>
+                    </div>
+                </a>
+                <a href="https://zalo.me/0913553362" target="_blank" class="blog-item">
+                    <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=200" class="blog-thumb" alt="Bài viết">
+                    <div class="blog-info">
+                        <h4>Top 8 Bí Kuyết Kéo Dài Thời Gian Quan Hệ Cho Phái Mạnh</h4>
+                    </div>
+                </a>
+                <a href="https://zalo.me/0913553362" target="_blank" class="blog-item">
+                    <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=200" class="blog-thumb" alt="Bài viết">
+                    <div class="blog-info">
+                        <h4>Hướng Dẫn Sử Dụng Gel Bôi Trơn & Bao Cao Su Đúng Cách</h4>
+                    </div>
+                </a>
             </div>
         </div>
 
-        <!-- Nút Zalo Chủ Đạo -->
-        <a href="https://zalo.me/0913553362" class="zalo-main-btn">
-            💬 Nhắn Zalo Tư Vấn Kín Đáo Nhanh (0913.553.362)
+    </div>
+
+    <!-- Sticky Bottom Zalo Bar -->
+    <div class="sticky-zalo">
+        <div class="sticky-zalo-text">
+            📞 Tư vấn bí mật & Giao siêu tốc:
+        </div>
+        <a href="https://zalo.me/0913553362" target="_blank" class="btn-zalo-now">
+            <i class="fa-solid fa-comment-dots"></i> CHAT ZALO NGAY
         </a>
+    </div>
 
-        <!-- Footer -->
-        <div class="footer">
-            © 2026 Men Health Store. Hỗ trợ khách hàng 24/7.
+    <!-- Chatbot Widget -->
+    <div class="chat-widget">
+        <div class="chat-box" id="chatBox">
+            <div class="chat-header">
+                <span>🤖 Trợ Lý Tư Vấn Tự Động</span>
+                <i class="fa-solid fa-xmark" onclick="toggleChat()" style="cursor: pointer;"></i>
+            </div>
+            <div class="chat-body" id="chatBody">
+                <div class="msg bot">
+                    Xin chào anh! Em là trợ lý tư vấn tự động. Anh đang cần hỗ trợ thông tin nào ạ?
+                </div>
+                <div class="chat-options" id="chatOptions">
+                    <button class="option-btn" onclick="botReply('kin-dao')">🔒 Giao hàng có kín đáo không?</button>
+                    <button class="option-btn" onclick="botReply('hot')">🔥 Sản phẩm kéo dài thời gian hot nhất?</button>
+                    <button class="option-btn" onclick="botReply('zalo')">💬 Chat trực tiếp với tư vấn viên</button>
+                </div>
+            </div>
+        </div>
+        <div class="chat-btn" onclick="toggleChat()">
+            <i class="fa-solid fa-comments"></i>
+            <span class="chat-badge">1</span>
         </div>
     </div>
 
+    <!-- JS Logic -->
+    <script>
+        // Filter by Search Keyword
+        function filterProducts() {
+            let input = document.getElementById('searchInput').value.toLowerCase();
+            let cards = document.getElementsByClassName('product-card');
+
+            for (let i = 0; i < cards.length; i++) {
+                let name = cards[i].getAttribute('data-name');
+                if (name.includes(input)) {
+                    cards[i].style.display = "flex";
+                } else {
+                    cards[i].style.display = "none";
+                }
+            }
+        }
+
+        // Filter by Category Tabs
+        function filterCategory(category) {
+            let btns = document.getElementsByClassName('tab-btn');
+            for (let btn of btns) {
+                btn.classList.remove('active');
+            }
+            event.target.classList.add('active');
+
+            let cards = document.getElementsByClassName('product-card');
+            for (let card of cards) {
+                if (category === 'all' || card.getAttribute('data-category') === category) {
+                    card.style.display = "flex";
+                } else {
+                    card.style.display = "none";
+                }
+            }
+        }
+
+        // Chatbot Toggle
+        function toggleChat() {
+            let box = document.getElementById('chatBox');
+            if (box.style.display === 'flex') {
+                box.style.display = 'none';
+            } else {
+                box.style.display = 'flex';
+            }
+        }
+
+        // Chatbot Auto Response
+        function botReply(type) {
+            let chatBody = document.getElementById('chatBody');
+            
+            if (type === 'kin-dao') {
+                chatBody.innerHTML += `<div class="msg user">Giao hàng có kín đáo không?</div>`;
+                setTimeout(() => {
+                    chatBody.innerHTML += `
+                        <div class="msg bot">
+                            Dạ AN TÂM 100% ạ! Đơn hàng được che tên sản phẩm hoàn toàn, đóng gói như quà tặng lịch sự.
+                            <br><a href="https://zalo.me/0913553362" target="_blank" class="zalo-direct-link">Bấm đây để Chat Zalo ngay</a>
+                        </div>
+                    `;
+                    chatBody.scrollTop = chatBody.scrollHeight;
+                }, 500);
+            } else if (type === 'hot') {
+                chatBody.innerHTML += `<div class="msg user">Sản phẩm nào tốt nhất?</div>`;
+                setTimeout(() => {
+                    chatBody.innerHTML += `
+                        <div class="msg bot">
+                            Bên em có dòng Adenafil 100mg và Bao gân gai đang bán chạy nhất tuần này ạ!
+                            <br><a href="https://zalo.me/0913553362" target="_blank" class="zalo-direct-link">Nhận Bảng Giá Zalo</a>
+                        </div>
+                    `;
+                    chatBody.scrollTop = chatBody.scrollHeight;
+                }, 500);
+            } else if (type === 'zalo') {
+                chatBody.innerHTML += `<div class="msg user">Tôi muốn gặp trực tiếp shop</div>`;
+                setTimeout(() => {
+                    chatBody.innerHTML += `
+                        <div class="msg bot">
+                            Dạ mời anh bấm vào nút bên dưới để chuyển sang khung chat Zalo trực tiếp với shop nha:
+                            <br><a href="https://zalo.me/0913553362" target="_blank" class="zalo-direct-link">👉 MỞ CHAT ZALO 👈</a>
+                        </div>
+                    `;
+                    chatBody.scrollTop = chatBody.scrollHeight;
+                }, 500);
+            }
+            
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+    </script>
 </body>
 </html>
