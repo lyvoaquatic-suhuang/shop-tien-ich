@@ -331,16 +331,25 @@
         }
         .cart-items-list {
             margin-bottom: 15px;
-            max-height: 150px;
+            max-height: 250px;
             overflow-y: auto;
-            border-bottom: 1px dashed #ccc;
+            border-bottom: 2px solid #ddd;
             padding-bottom: 10px;
         }
         .cart-item-row {
             display: flex;
             justify-content: space-between;
-            font-size: 12px;
-            margin-bottom: 6px;
+            font-size: 13px;
+            margin-bottom: 8px;
+            color: #444;
+        }
+        .cart-total-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+            font-size: 16px;
+            font-weight: bold;
         }
         .form-group {
             margin-bottom: 10px;
@@ -431,15 +440,15 @@
     <div id="checkoutModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <span>GIỎ HÀNG & XÁC NHẬN ĐẶT HÀNG</span>
+                <span>GIỎ HÀNG CỦA BẠN</span>
                 <span class="close-modal" onclick="closeCartModal()">&times;</span>
             </div>
             
             <div class="cart-items-list" id="cartItemsList">
-                <!-- Danh sách sản phẩm trong giỏ -->
+                <!-- Danh sách sản phẩm trong giỏ sẽ render ở đây -->
             </div>
 
-            <form id="orderForm" onsubmit="submitOrder(event)">
+            <form id="orderForm" onsubmit="submitOrder(event)" style="margin-top: 15px;">
                 <div class="form-group">
                     <label>Họ và Tên</label>
                     <input type="text" id="cusName" class="form-control" required placeholder="Nhập họ và tên...">
@@ -546,20 +555,30 @@
                 return;
             }
             const listContainer = document.getElementById('cartItemsList');
-            listContainer.innerHTML = '';
+            let listHtml = '';
             let totalPrice = 0;
 
+            // Render từng món hàng
             cart.forEach(item => {
                 let itemTotal = item.price * item.quantity;
                 totalPrice += itemTotal;
-                listContainer.innerHTML += `
+                listHtml += `
                     <div class="cart-item-row">
                         <span><b>${item.name}</b> (x${item.quantity})</span>
-                        <span style="color: #e53935; font-weight: bold;">${itemTotal.toLocaleString()}đ</span>
+                        <span style="color: #666;">${itemTotal.toLocaleString()}đ</span>
                     </div>
                 `;
             });
 
+            // Thêm dòng TỔNG CỘNG bự chà bá vào dưới cùng
+            listHtml += `
+                <div class="cart-total-row">
+                    <span>TỔNG THANH TOÁN:</span>
+                    <span style="color: #e53935; font-size: 18px;">${totalPrice.toLocaleString()}đ</span>
+                </div>
+            `;
+            
+            listContainer.innerHTML = listHtml;
             document.getElementById('checkoutModal').style.display = 'flex';
         }
 
@@ -571,37 +590,48 @@
             e.preventDefault();
             if (cart.length === 0) return;
 
+            // Đổi text button thành "Đang gửi..." để tránh khách bấm 2 lần
+            const submitBtn = document.querySelector('.btn-submit');
+            submitBtn.innerText = "ĐANG XỬ LÝ...";
+            submitBtn.disabled = true;
+
             const name = document.getElementById('cusName').value;
             const phone = document.getElementById('cusPhone').value;
             const address = document.getElementById('cusAddress').value;
 
-            // Tổng hợp tên các sản phẩm trong giỏ thành 1 chuỗi
-            let productSummary = cart.map(item => `${item.name} (SL: ${item.quantity})`).join(' - ');
+            // Tổng hợp thông tin
+            let productSummary = cart.map(item => `- ${item.name} (x${item.quantity})`).join('\n');
             let totalPriceVal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toLocaleString() + 'đ';
 
-            // --- LINK GOOGLE APPS SCRIPT ĐÃ TỰ ĐỘNG CẬP NHẬT CHUẨN ---
             const scriptURL = 'https://script.google.com/macros/s/AKfycbwcRkl04j54oZJL2Eg_HVcYxytfw8DTmZGVv1C4UyRM6UvN5kc5a-76FKMWuCCJI3qfqA/exec';
 
-            const formData = new FormData();
-            formData.append('Họ Và Tên', name);
-            formData.append('Số ĐT', `'` + phone); // Giữ nguyên số 0 đầu
-            formData.append('Địa Chỉ', address);
-            formData.append('Sản Phẩm Đặt Mua', productSummary);
-            formData.append('Tổng Tiền', totalPriceVal);
+            // DÙNG URLSearchParams ĐỂ TƯƠNG THÍCH 100% VỚI GOOGLE SHEET CỦA ANH
+            const data = new URLSearchParams();
+            data.append('Họ Và Tên', name);
+            data.append('Số ĐT', "'" + phone); 
+            data.append('Địa Chỉ', address);
+            data.append('Sản Phẩm Đặt Mua', productSummary);
+            data.append('Tổng Tiền', totalPriceVal);
 
-            fetch(scriptURL, { method: 'POST', body: formData })
-                .then(response => {
-                    alert('Đặt hàng thành công! Đã gửi thông tin đơn hàng về hệ thống.');
-                    cart = [];
-                    updateCartUI();
-                    closeCartModal();
-                    document.getElementById('orderForm').reset();
-                })
-                .catch(error => {
-                    // Fallback chuyển qua Zalo nếu lỗi mạng
-                    let zaloMsg = encodeURIComponent(`Đơn hàng mới:\nTên: ${name}\nSĐT: ${phone}\nĐ/c: ${address}\nSản phẩm: ${productSummary}\nTổng tiền: ${totalPriceVal}`);
-                    window.location.href = `https://zalo.me/0913553362?text=${zaloMsg}`;
-                });
+            fetch(scriptURL, { 
+                method: 'POST', 
+                body: data 
+            })
+            .then(response => {
+                alert('Đặt hàng thành công! Đã gửi thông tin đơn hàng về hệ thống.');
+                cart = [];
+                updateCartUI();
+                closeCartModal();
+                document.getElementById('orderForm').reset();
+            })
+            .catch(error => {
+                let zaloMsg = encodeURIComponent(`Đơn hàng mới:\nTên: ${name}\nSĐT: ${phone}\nĐ/c: ${address}\nSản phẩm:\n${productSummary}\nTổng tiền: ${totalPriceVal}`);
+                window.location.href = `https://zalo.me/0913553362?text=${zaloMsg}`;
+            })
+            .finally(() => {
+                submitBtn.innerText = "XÁC NHẬN ĐẶT MUA NGAY";
+                submitBtn.disabled = false;
+            });
         }
 
         // Khởi chạy
