@@ -382,6 +382,34 @@
             font-size: 14px;
             text-transform: uppercase;
         }
+
+        /* ===== CÓ THỂ BẠN QUAN TÂM + CHAT ZALO ===== */
+        .blog-section { background: #fff; padding: 15px; border-radius: 8px; margin-top: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .blog-title { background: #0b5394; color: #fff; padding: 10px 15px; font-weight: bold; text-transform: uppercase; margin: -15px -15px 15px -15px; border-radius: 8px 8px 0 0; font-size: 15px; }
+        .blog-list { display: flex; flex-direction: column; }
+        .blog-item { display: flex; gap: 12px; color: #333; padding: 10px 0; border-bottom: 1px dashed #e5e5e5; align-items: center; cursor: pointer; }
+        .blog-item:last-child { border-bottom: none; }
+        .blog-item:hover h4 { color: #d32f2f; }
+        .blog-thumb { width: 112px; height: 80px; border-radius: 6px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 26px; background-size: cover; background-position: center; }
+        .blog-info h4 { font-size: 14px; font-weight: 600; line-height: 1.4; color: #222; }
+        .blog-info p { font-size: 11px; color: #666; margin-top: 3px; line-height: 1.4; }
+        .blog-cta { margin-top: 12px; padding: 12px; background: #f0f7ff; border-radius: 8px; text-align: center; font-size: 13px; font-weight: 600; color: #0b5394; }
+
+        .zalo-float { position: fixed; right: 15px; bottom: 78px; z-index: 100; background: var(--secondary-color); color: #fff; padding: 10px 16px; border-radius: 25px; text-decoration: none; font-weight: bold; font-size: 13px; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); animation: zaloPulse 1.5s infinite; }
+        @keyframes zaloPulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+        .btn-zalo-inline { display: inline-flex; align-items: center; gap: 6px; margin-top: 8px; background: var(--secondary-color); color: #fff; padding: 9px 18px; border-radius: 20px; text-decoration: none; font-weight: bold; font-size: 13px; }
+
+        .art-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.65); z-index: 1100; align-items: center; justify-content: center; padding: 15px; }
+        .art-box { background: #fff; width: 100%; max-width: 560px; max-height: 90vh; overflow-y: auto; border-radius: 12px; position: relative; box-shadow: 0 8px 24px rgba(0,0,0,0.35); }
+        .art-banner { aspect-ratio: 16 / 9; width: 100%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 44px; background-size: cover; background-position: center; border-radius: 12px 12px 0 0; }
+        .art-close { position: absolute; top: 10px; right: 12px; width: 32px; height: 32px; border-radius: 50%; background: rgba(0,0,0,0.45); color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 18px; }
+        .art-content { padding: 18px 20px 20px; }
+        .art-content h3 { font-size: 18px; line-height: 1.4; color: #222; margin-bottom: 12px; }
+        .art-content p { font-size: 14px; line-height: 1.7; color: #444; margin-bottom: 10px; }
+        .art-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+        .art-actions button, .art-actions a { flex: 1; min-width: 150px; text-align: center; padding: 11px 12px; border-radius: 22px; font-weight: bold; font-size: 13px; text-decoration: none; border: none; cursor: pointer; }
+        .art-btn-shop { background: var(--primary-color); color: #000; }
+        .art-btn-zalo { background: var(--secondary-color); color: #fff; }
     </style>
 </head>
 <body>
@@ -423,6 +451,30 @@
         <!-- Product Grid Hiển Thị Toàn Bộ -->
         <div class="product-grid" id="productGrid">
             <!-- Render tự động qua JS -->
+        </div>
+    </div>
+
+    <!-- Có Thể Bạn Quan Tâm -->
+    <div class="container">
+        <div class="blog-section">
+            <div class="blog-title">CÓ THỂ BẠN QUAN TÂM</div>
+            <div class="blog-list" id="blogList"></div>
+            <div class="blog-cta">
+                💬 Cần tư vấn kín đáo & giao siêu tốc? Nhắn shop qua Zalo, không ai phán xét bạn.<br>
+                <a href="https://zalo.me/0913553362" target="_blank" rel="noopener" class="btn-zalo-inline"><i class="fa-solid fa-comment-dots"></i> CHAT ZALO NGAY</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Nút Chat Zalo nổi -->
+    <a href="https://zalo.me/0913553362" target="_blank" rel="noopener" class="zalo-float"><i class="fa-solid fa-comment-dots"></i> CHAT ZALO NGAY</a>
+
+    <!-- Popup đọc bài viết -->
+    <div class="art-modal" id="articleModal" onclick="if(event.target===this) closeArticle()">
+        <div class="art-box">
+            <div class="art-close" onclick="closeArticle()">&times;</div>
+            <div class="art-banner" id="artBanner"></div>
+            <div class="art-content" id="artContent"></div>
         </div>
     </div>
 
@@ -634,8 +686,155 @@
             });
         }
 
+        // ===== BÀI VIẾT "CÓ THỂ BẠN QUAN TÂM" =====
+        // Muốn thêm ảnh thật cho bài: thêm dòng img: "images/ten-anh.jpg" vào bài đó.
+        // cat = nhóm sản phẩm liên quan (nút "Xem sản phẩm phù hợp"), để "all" nếu không có.
+        const articles = [
+            { img: "images/bai-01.jpg", icon: "fa-heart", colors: ["#ff6b9d", "#ff9a6b"], cat: "gel-boi-tron",
+              title: "Bottom Lần Đầu: Chuẩn Bị & Vệ Sinh Sao Cho Thoải Mái, Tự Tin",
+              sum: "Vệ sinh nhẹ nhàng, bôi trơn đủ và đi chậm để lần đầu thật dễ chịu...",
+              body: [
+                "Điều quan trọng nhất là tâm lý thoải mái. Hãy nói trước với bạn tình về nhịp độ, và thống nhất một tín hiệu để dừng lại bất cứ lúc nào bạn thấy không ổn.",
+                "Về vệ sinh, chỉ cần thụt rửa nhẹ nhàng bằng nước ấm sạch với dụng cụ chuyên dụng. Không cần rửa quá nhiều lần hay dùng xà phòng, dung dịch mạnh, vì dễ làm tổn thương lớp niêm mạc và gây khó chịu hơn.",
+                "Gel bôi trơn là “người bạn thân” của lần đầu: hãy dùng nhiều hơn bạn nghĩ, bôi cả bên ngoài lẫn bên trong, và thêm ngay khi thấy khô. Khởi động từ từ, thả lỏng và hít thở đều.",
+                "Nếu thấy đau nhói hoặc chảy máu nhiều, hãy dừng lại. Đau kéo dài thì nên gặp bác sĩ để được kiểm tra."
+              ] },
+            { img: "images/bai-02.jpg", icon: "fa-droplet", colors: ["#7f5af0", "#2cb1ff"], cat: "gel-boi-tron",
+              title: "Gel Bôi Trơn Gốc Nước Hay Silicone? Chọn Sao Cho Đúng",
+              sum: "Mỗi loại hợp một hoàn cảnh, và có vài thứ tuyệt đối không nên dùng thay gel...",
+              body: [
+                "Gel gốc nước dùng được với bao cao su latex và mọi loại đồ chơi, dễ rửa sạch, nhưng khô nhanh hơn nên cần bôi thêm giữa chừng.",
+                "Gel silicone trơn lâu và không bị trôi khi gặp nước, rất hợp khi cần độ trơn bền. Lưu ý: không dùng chung với đồ chơi bằng silicone vì có thể làm hỏng bề mặt đồ chơi.",
+                "Đừng dùng dầu ăn, vaseline hay kem dưỡng da thay gel khi dùng bao cao su latex, vì dầu làm latex yếu đi và dễ rách. Nên tránh gel có hương liệu nồng cho vùng nhạy cảm.",
+                "Chưa biết chọn loại nào? Nhắn Zalo để shop tư vấn riêng cho bạn."
+              ] },
+            { img: "images/bai-03.jpg", icon: "fa-shield-heart", colors: ["#11998e", "#38ef7d"], cat: "bao-cao-su",
+              title: "Bao Cao Su Đúng Cách Cho Các Cặp Đôi Đồng Giới",
+              sum: "Chọn đúng size, dùng đúng cách để vừa an toàn vừa thoải mái...",
+              body: [
+                "Bao cao su vẫn là cách hiệu quả và dễ tiếp cận nhất để giảm nguy cơ HIV và nhiều bệnh lây qua đường tình dục, kể cả khi quan hệ qua đường hậu môn.",
+                "Chọn đúng kích cỡ: quá chật dễ rách, quá rộng dễ tuột. Kiểm tra hạn sử dụng và bao bì còn nguyên trước khi dùng, mở gói bằng tay chứ không dùng răng hay kéo.",
+                "Bóp nhẹ đầu bao để đẩy khí ra khi đeo, thêm gel gốc nước bên ngoài để giảm ma sát. Mỗi lần dùng một bao mới, và thay bao mới khi chuyển từ hoạt động này sang hoạt động khác.",
+                "Dùng xong hãy bỏ vào thùng rác, không xả xuống bồn cầu."
+              ] },
+            { img: "images/bai-04.jpg", icon: "fa-wind", colors: ["#f7971e", "#ffd200"], cat: "popper",
+              title: "Popper: Những Điều Cần Biết Để Dùng An Toàn",
+              sum: "Đọc kỹ trước khi dùng, đặc biệt nếu bạn có dùng thuốc hỗ trợ cương...",
+              body: [
+                "Chỉ dành cho người từ đủ 18 tuổi. Popper là chất dạng hít làm giãn mạch máu, khiến huyết áp hạ tạm thời, nên có thể gây chóng mặt, đau đầu hoặc đỏ mặt.",
+                "Tuyệt đối không dùng popper cùng lúc với thuốc hỗ trợ cương (như sildenafil, tadalafil) hoặc thuốc nhóm nitrat, vì huyết áp có thể tụt rất nguy hiểm.",
+                "Không nên dùng nếu bạn có bệnh tim, huyết áp thấp, thiếu máu hoặc tăng nhãn áp. Chỉ hít, không được uống hay nuốt, và tránh để dính lên da.",
+                "Popper rất dễ cháy nên tránh xa lửa, thuốc lá, và chỉ dùng ở nơi thông thoáng. Không dùng khi lái xe, không kết hợp với rượu hay nhiều chất khác. Thấy chóng mặt, khó thở thì dừng ngay và nghỉ ngơi."
+              ] },
+            { img: "images/bai-05.jpg", icon: "fa-bolt", colors: ["#ee0979", "#ff6a00"], cat: "cuong-cung",
+              title: "Khi Cơ Thể “Không Nghe Lời”: Nguyên Nhân & Khi Nào Nên Gặp Bác Sĩ",
+              sum: "Ai cũng có lúc gặp chuyện này. Hiểu đúng để bớt áp lực và xử lý an toàn...",
+              body: [
+                "Khó cương hay “bảo mà không nghe” là chuyện rất phổ biến, không phải lỗi của bạn. Nguyên nhân thường gặp gồm căng thẳng, thiếu ngủ, rượu bia, hồi hộp khi gặp bạn tình mới hoặc áp lực phải “thể hiện thật tốt”.",
+                "Đôi khi đó là dấu hiệu của vấn đề sức khỏe như huyết áp, tim mạch hay tiểu đường. Nếu tình trạng lặp lại nhiều tuần, bạn nên đi khám thay vì tự chịu đựng.",
+                "Nếu dùng sản phẩm hỗ trợ, hãy hỏi ý kiến bác sĩ, nhất là khi bạn có bệnh nền hoặc đang dùng thuốc khác. Không tự ý tăng liều, không dùng cùng popper, và chỉ mua hàng có nguồn gốc rõ ràng.",
+                "Ngủ đủ, tập thể dục và nói chuyện thẳng thắn với bạn tình cũng giúp cải thiện rất nhiều."
+              ] },
+            { img: "images/bai-06.jpg", icon: "fa-user-shield", colors: ["#396afc", "#2948ff"], cat: "all",
+              title: "Ngại Mua Đồ? Ở Đây Không Ai Phán Xét Bạn",
+              sum: "Đóng gói kín đáo, bảo mật thông tin, tư vấn riêng qua Zalo...",
+              body: [
+                "Shop phục vụ cộng đồng LGBT và bất kỳ ai cần sự riêng tư. Chúng tôi không hỏi han, không phán xét, chỉ giúp bạn chọn đúng thứ mình cần.",
+                "Đơn hàng được bọc kín, bên ngoài không ghi tên sản phẩm. Thông tin của bạn chỉ dùng để giao hàng và xác nhận đơn.",
+                "Bạn có thể dùng tên gọi thân mật thay tên thật khi đặt hàng nếu thấy thoải mái hơn, miễn là số điện thoại nhận hàng và địa chỉ giao chính xác.",
+                "Muốn hỏi điều gì tế nhị, cứ nhắn Zalo riêng, shop trả lời kín đáo."
+              ] },
+            { img: "images/bai-07.jpg", icon: "fa-ribbon", colors: ["#e53935", "#ff7eb3"], cat: "bao-cao-su",
+              title: "Yêu An Toàn, Sống Thật: Xét Nghiệm HIV/STI, PrEP Và PEP",
+              sum: "Những điều cộng đồng nên biết để bảo vệ bản thân và bạn tình...",
+              body: [
+                "Nên xét nghiệm HIV và các bệnh lây qua đường tình dục (giang mai, lậu, chlamydia...) định kỳ, khoảng 3–6 tháng một lần nếu bạn có bạn tình mới hoặc nhiều bạn tình. Nhiều cơ sở y tế và tổ chức cộng đồng có xét nghiệm nhanh, bảo mật.",
+                "PrEP là thuốc dự phòng trước phơi nhiễm HIV, hiệu quả rất cao khi dùng đúng, cần được tư vấn và kê đơn tại cơ sở y tế. PrEP không ngăn được các bệnh lây khác, nên vẫn nên kết hợp bao cao su.",
+                "PEP là thuốc dự phòng sau phơi nhiễm, phải bắt đầu càng sớm càng tốt và trong vòng 72 giờ sau khi có nguy cơ (ví dụ bao rách hoặc quan hệ không dùng bao).",
+                "Người nhiễm HIV điều trị ổn định, tải lượng dưới ngưỡng phát hiện thì không lây HIV qua quan hệ tình dục (U=U). Biết tình trạng của mình là cách yêu thương bản thân và bạn tình."
+              ] },
+            { img: "images/bai-08.jpg", icon: "fa-star", colors: ["#8e2de2", "#4a00e0"], cat: "do-choi",
+              title: "Đồ Chơi Người Lớn: Chọn & Vệ Sinh Sao Cho An Toàn",
+              sum: "Chất liệu, loại gel phù hợp và cách vệ sinh để dùng lâu bền, không lo kích ứng...",
+              body: [
+                "Ưu tiên đồ chơi bằng silicone chuyên dụng, bề mặt mịn, không mùi hắc. Đồ chơi dùng cho hậu môn phải có đế hoặc phần đầu loe để không bị tuột vào trong.",
+                "Dùng gel gốc nước với đồ chơi silicone. Bôi trơn đầy đủ và tăng dần từng bước, tuyệt đối không cố ép khi thấy đau.",
+                "Vệ sinh trước và sau mỗi lần dùng bằng nước ấm với xà phòng dịu nhẹ, lau khô rồi cất nơi sạch sẽ. Nếu dùng chung, hãy bọc bao cao su và thay bao mới cho mỗi người.",
+                "Thấy đỏ rát, ngứa hoặc khó chịu kéo dài thì ngừng dùng và hỏi ý kiến bác sĩ."
+              ] },
+            { img: "images/bai-09.jpg", icon: "fa-magnifying-glass", colors: ["#00b09b", "#96c93d"], cat: "bao-cao-su",
+              title: "Cách Nhận Biết Bao Cao Su & Gel Bôi Trơn Chính Hãng",
+              sum: "Vài mẹo nhanh để tránh hàng kém chất lượng, bảo vệ sức khỏe của bạn...",
+              body: [
+                "Hàng chuẩn có bao bì rõ ràng, in đủ tên nhãn hiệu, thành phần, hạn sử dụng và số lô. Hạn dùng mờ, in nhòe hoặc sai chính tả là dấu hiệu đáng ngờ.",
+                "Gói bao cao su bị rách, phồng bất thường hoặc chất bôi trơn khô cứng thì không nên dùng. Với gel bôi trơn, nên chọn loại ghi rõ thành phần và mùi nhẹ; giá rẻ bất thường thường đi kèm chất lượng không đảm bảo.",
+                "Cất bao cao su nơi khô mát, tránh để lâu trong túi quần, ví hoặc cốp xe dưới nắng vì nhiệt độ cao làm latex nhanh hỏng."
+              ] },
+            { img: "images/bai-10.jpg", icon: "fa-comments", colors: ["#ff416c", "#ff4b2b"], cat: "all",
+              title: "Bạn Tình Mới: Nói Chuyện Về An Toàn Sao Cho Tự Nhiên",
+              sum: "Đồng thuận, ranh giới và sự an toàn là nền tảng của một buổi hẹn đẹp...",
+              body: [
+                "Nói chuyện về bao cao su, xét nghiệm hay giới hạn của nhau không làm mất hứng, mà cho thấy bạn tôn trọng bạn tình và chính mình.",
+                "Bạn có thể mở lời nhẹ nhàng, ví dụ: “Mình hay dùng bao và xét nghiệm định kỳ, bạn thì sao?”. Nói sớm, trước khi mọi thứ trở nên nóng.",
+                "Đồng thuận phải rõ ràng và có thể rút lại bất cứ lúc nào. Không ai phải làm điều mình không muốn, và say rượu không phải là sự đồng thuận.",
+                "Chuẩn bị sẵn bao cao su và gel bôi trơn, ưu tiên gặp ở nơi an toàn, và báo cho một người bạn tin cậy biết bạn đi đâu nếu gặp người mới quen qua mạng."
+              ] }
+        ];
+
+        function artBackground(a) {
+            const grad = `linear-gradient(135deg, ${a.colors[0]}, ${a.colors[1]})`;
+            return a.img ? `background-image: url('${a.img}'), ${grad};` : `background-image: ${grad};`;
+        }
+
+        function renderArticles() {
+            const list = document.getElementById('blogList');
+            list.innerHTML = articles.map((a, i) => `
+                <div class="blog-item" onclick="openArticle(${i})">
+                    <div class="blog-thumb" style="${artBackground(a)}">${a.img ? '' : `<i class="fa-solid ${a.icon}"></i>`}</div>
+                    <div class="blog-info">
+                        <h4>${i + 1}. ${a.title}</h4>
+                        <p>${a.sum}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openArticle(i) {
+            const a = articles[i];
+            const banner = document.getElementById('artBanner');
+            banner.style.cssText = artBackground(a);
+            banner.innerHTML = a.img ? '' : `<i class="fa-solid ${a.icon}"></i>`;
+            document.getElementById('artContent').innerHTML = `
+                <h3>${a.title}</h3>
+                ${a.body.map(t => `<p>${t}</p>`).join('')}
+                <div class="art-actions">
+                    ${a.cat && a.cat !== 'all' ? `<button class="art-btn-shop" onclick="goToCategory('${a.cat}')">XEM SẢN PHẨM PHÙ HỢP</button>` : ''}
+                    <a class="art-btn-zalo" href="https://zalo.me/0913553362" target="_blank" rel="noopener">NHẮN ZALO TƯ VẤN</a>
+                </div>
+            `;
+            document.getElementById('articleModal').style.display = 'flex';
+            document.querySelector('#articleModal .art-box').scrollTop = 0;
+        }
+
+        function closeArticle() {
+            document.getElementById('articleModal').style.display = 'none';
+        }
+
+        function goToCategory(cat) {
+            closeArticle();
+            currentCategory = cat;
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.toggle('active', (btn.getAttribute('onclick') || '').includes(`'${cat}'`));
+            });
+            filterProducts();
+            document.querySelector('.category-tabs').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeArticle(); });
+
         // Khởi chạy
         renderProducts(products);
+        renderArticles();
     </script>
 </body>
 </html>
