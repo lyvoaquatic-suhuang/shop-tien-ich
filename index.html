@@ -410,6 +410,14 @@
         .art-actions button, .art-actions a { flex: 1; min-width: 150px; text-align: center; padding: 11px 12px; border-radius: 22px; font-weight: bold; font-size: 13px; text-decoration: none; border: none; cursor: pointer; }
         .art-btn-shop { background: var(--primary-color); color: #000; }
         .art-btn-zalo { background: var(--secondary-color); color: #fff; }
+
+        /* ===== Khuyến mãi / bố cục sản phẩm ===== */
+        .section-title.promo { background: linear-gradient(90deg, #e53935, #ff7043); color: #fff; }
+        .tab-btn.tab-hot { border-color: #e53935; color: #e53935; }
+        .tab-btn.tab-hot.active { background: #e53935; color: #fff; }
+        .promo-note { font-size: 11px; font-weight: 600; color: #d32f2f; margin-bottom: 6px; line-height: 1.3; }
+        .section-gap { height: 18px; }
+        .empty-note { background: #fff; padding: 25px 15px; text-align: center; border-radius: 8px; color: #555; font-size: 14px; line-height: 1.6; }
     </style>
 </head>
 <body>
@@ -433,6 +441,7 @@
     <!-- 6 Danh Mục Lọc Nhanh + Tất Cả -->
     <div class="category-tabs">
         <button class="tab-btn active" onclick="setCategory('all')">Tất cả</button>
+        <button class="tab-btn tab-hot" onclick="setCategory('khuyen-mai')">🔥 Khuyến Mãi</button>
         <button class="tab-btn" onclick="setCategory('cuong-cung')">Cương Cứng Nam</button>
         <button class="tab-btn" onclick="setCategory('popper')">Tinh Dầu Popper</button>
         <button class="tab-btn" onclick="setCategory('bao-cao-su')">Bao Cao Su</button>
@@ -442,16 +451,8 @@
     </div>
 
     <!-- Main Container -->
-    <div class="container">
-        <div class="section-title">
-            <span>DANH SÁCH TẤT CẢ SẢN PHẨM</span>
-            <span id="productCount" style="font-size: 12px;"></span>
-        </div>
-
-        <!-- Product Grid Hiển Thị Toàn Bộ -->
-        <div class="product-grid" id="productGrid">
-            <!-- Render tự động qua JS -->
-        </div>
+    <div class="container" id="productSections">
+        <!-- Render tự động qua JS -->
     </div>
 
     <!-- Có Thể Bạn Quan Tâm -->
@@ -520,17 +521,23 @@
 
     <!-- JS Logic -->
     <script>
+        // ===== DANH SÁCH SẢN PHẨM =====
+        // category: cuong-cung | popper | bao-cao-su | gel-boi-tron | do-choi | vong-deo
+        // promo: true            -> sản phẩm nằm trong nhóm KHUYẾN MÃI (được đẩy lên đầu trang)
+        // promoNote: "..."       -> dòng chữ đỏ nhỏ (tặng kèm, freeship...), có hoặc không đều được
+        // video: "images/x.mp4"  -> (tùy chọn) video sản phẩm, img sẽ làm ảnh bìa video
+        // tags: "tu khoa khac"   -> (tùy chọn) từ khóa phụ để khách tìm kiếm ra sản phẩm
         const products = [
-            { id: 1, name: "Combo 5 Hộp Thuốc Cương Cứng Adenafil", category: "cuong-cung", price: 350000, oldPrice: 490000, badge: "-28% HOT", img: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=300&q=80" },
+            { id: 1, promo: true, promoNote: "🎁 Tặng kèm 1 gel bôi trơn mini", name: "Combo 5 Hộp Thuốc Cương Cứng Adenafil", category: "cuong-cung", price: 350000, oldPrice: 490000, badge: "-28% HOT", img: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=300&q=80" },
             { id: 2, name: "Viên Uống Hỗ Trợ Cương Cứng Cấp Tốc", category: "cuong-cung", price: 250000, oldPrice: 350000, badge: "HOT", img: "https://images.unsplash.com/photo-1471864190281-a93a3070b6de?auto=format&fit=crop&w=300&q=80" },
             { id: 3, name: "Tinh Dầu Popper Rush Gốc Siêu Mạnh", category: "popper", price: 220000, oldPrice: 300000, badge: "BÁN CHẠY", img: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?auto=format&fit=crop&w=300&q=80" },
-            { id: 4, name: "Tinh Dầu Popper Jungle Juice Êm Dịu", category: "popper", price: 190000, oldPrice: 250000, badge: "-24%", img: "https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=300&q=80" },
+            { id: 4, promo: true, promoNote: "🎁 Mua 2 tặng 1", name: "Tinh Dầu Popper Jungle Juice Êm Dịu", category: "popper", price: 190000, oldPrice: 250000, badge: "-24%", img: "https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=300&q=80" },
             { id: 5, name: "Bao Cao Su Gân Gai Nhiều Bi Tròn", category: "bao-cao-su", price: 199000, oldPrice: 280000, badge: "-29%", img: "https://images.unsplash.com/photo-1555685812-4b943f1cb0eb?auto=format&fit=crop&w=300&q=80" },
             { id: 6, name: "Bao Cao Su Siêu Mỏng Ôm Khít Tự Nhiên", category: "bao-cao-su", price: 150000, oldPrice: 200000, badge: "CHÍNH HÃNG", img: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=300&q=80" },
-            { id: 7, name: "Gel Bôi Trơn Nhật Bản Gốc Nước 200ml", category: "gel-boi-tron", price: 199000, oldPrice: 280000, badge: "MUA 1 TẶNG 1", img: "https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=300&q=80" },
+            { id: 7, promo: true, promoNote: "🎁 Mua 1 tặng 1", name: "Gel Bôi Trơn Nhật Bản Gốc Nước 200ml", category: "gel-boi-tron", price: 199000, oldPrice: 280000, badge: "MUA 1 TẶNG 1", img: "https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=300&q=80" },
             { id: 8, name: "Gel Bôi Trơn Silicone Chuyên Dụng Anal", category: "gel-boi-tron", price: 250000, oldPrice: 350000, badge: "CAO CẤP", img: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=300&q=80" },
             { id: 9, name: "Máy Sục Tự Động Nhiều Chế Độ Thông Minh", category: "do-choi", price: 690000, oldPrice: 960000, badge: "-28%", img: "https://images.unsplash.com/photo-1583912267670-6575cb47231f?auto=format&fit=crop&w=300&q=80" },
-            { id: 10, name: "Trứng Rung Mini Điều Khiển Kín Đáo", category: "do-choi", price: 180000, oldPrice: 250000, badge: "HOT", img: "https://images.unsplash.com/photo-1555685812-4b943f1cb0eb?auto=format&fit=crop&w=300&q=80" },
+            { id: 10, promo: true, promoNote: "🚚 Miễn phí giao hàng", name: "Trứng Rung Mini Điều Khiển Kín Đáo", category: "do-choi", price: 180000, oldPrice: 250000, badge: "HOT", img: "https://images.unsplash.com/photo-1555685812-4b943f1cb0eb?auto=format&fit=crop&w=300&q=80" },
             { id: 11, name: "Vòng Đeo Silicon Đàn Hồi Kéo Dài Thời Gian", category: "vong-deo", price: 130000, oldPrice: 180000, badge: "TIỆN LỢI", img: "https://images.unsplash.com/photo-1516574187841-cb9cc2ca948b?auto=format&fit=crop&w=300&q=80" },
             { id: 12, name: "Vòng Đeo Tay Từ Tính Hỗ Trợ Nam Tính", category: "vong-deo", price: 220000, oldPrice: 300000, badge: "VIP", img: "https://images.unsplash.com/photo-1516574187841-cb9cc2ca948b?auto=format&fit=crop&w=300&q=80" }
         ];
@@ -538,27 +545,110 @@
         let cart = [];
         let currentCategory = 'all';
 
-        function renderProducts(list) {
-            const grid = document.getElementById('productGrid');
-            grid.innerHTML = '';
-            document.getElementById('productCount').innerText = `(${list.length} sản phẩm)`;
-            
-            list.forEach(p => {
-                grid.innerHTML += `
-                    <div class="product-card">
-                        ${p.badge ? `<div class="badge-sale">${p.badge}</div>` : ''}
-                        <img src="${p.img}" class="product-img" alt="${p.name}">
-                        <div class="product-info">
-                            <div class="product-title">${p.name}</div>
-                            <div class="price-box">
-                                <span class="current-price">${p.price.toLocaleString()}đ</span>
-                                <span class="old-price">${p.oldPrice.toLocaleString()}đ</span>
-                            </div>
-                            <button class="btn-buy" onclick="addToCart(${p.id})">THÊM VÀO GIỎ</button>
+        // ===== HIỂN THỊ SẢN PHẨM: khuyến mãi lên đầu, còn lại ngẫu nhiên =====
+        const categoryLabels = {
+            'cuong-cung': 'Cương Cứng Nam',
+            'popper': 'Tinh Dầu Popper',
+            'bao-cao-su': 'Bao Cao Su',
+            'gel-boi-tron': 'Gel Bôi Trơn',
+            'do-choi': 'Đồ Chơi Nam',
+            'vong-deo': 'Vòng Đeo Hỗ Trợ'
+        };
+
+        function normalizeText(t) {
+            return (t || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/g, 'd');
+        }
+        function escapeHtml(t) {
+            return String(t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        }
+        function shuffle(arr) {
+            const a = arr.slice();
+            for (let i = a.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [a[i], a[j]] = [a[j], a[i]];
+            }
+            return a;
+        }
+        // Thứ tự ngẫu nhiên: mỗi lần khách mở trang sẽ khác, nhưng giữ nguyên khi khách bấm lọc/tìm kiếm
+        const shuffledProducts = shuffle(products);
+
+        function productCardHTML(p) {
+            const media = p.video
+                ? `<video src="${p.video}" poster="${p.img}" class="product-img" controls playsinline preload="none"></video>`
+                : `<img src="${p.img}" class="product-img" alt="${escapeHtml(p.name)}" loading="lazy">`;
+            return `
+                <div class="product-card">
+                    ${p.badge ? `<div class="badge-sale">${p.badge}</div>` : ''}
+                    ${media}
+                    <div class="product-info">
+                        <div class="product-title">${p.name}</div>
+                        ${p.promoNote ? `<div class="promo-note">${p.promoNote}</div>` : ''}
+                        <div class="price-box">
+                            <span class="current-price">${p.price.toLocaleString()}đ</span>
+                            ${p.oldPrice ? `<span class="old-price">${p.oldPrice.toLocaleString()}đ</span>` : ''}
                         </div>
+                        <button class="btn-buy" onclick="addToCart(${p.id})">THÊM VÀO GIỎ</button>
                     </div>
-                `;
+                </div>`;
+        }
+
+        function sectionHTML(title, list, extraClass) {
+            return `
+                <div class="section-title ${extraClass || ''}">
+                    <span>${title}</span>
+                    <span style="font-size: 12px; white-space: nowrap;">(${list.length} sản phẩm)</span>
+                </div>
+                <div class="product-grid">${list.map(productCardHTML).join('')}</div>`;
+        }
+
+        function syncTabs() {
+            const hasKeyword = document.getElementById('searchInput').value.trim() !== '';
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                const onclick = btn.getAttribute('onclick') || '';
+                btn.classList.toggle('active', !hasKeyword && onclick.includes(`'${currentCategory}'`));
             });
+        }
+
+        function renderView() {
+            const keyword = document.getElementById('searchInput').value.trim();
+            const box = document.getElementById('productSections');
+            const promoFirst = list => list.slice().sort((a, b) => (b.promo ? 1 : 0) - (a.promo ? 1 : 0));
+            let html = '';
+
+            if (keyword) {
+                // Tìm kiếm: khớp tên, tên nhóm và từ khóa phụ (không phân biệt dấu). Gõ tên nhóm sẽ ra đủ cả nhóm.
+                const tokens = normalizeText(keyword).split(/\s+/).filter(Boolean);
+                const found = promoFirst(shuffledProducts.filter(p => {
+                    const hay = normalizeText(`${p.name} ${categoryLabels[p.category] || ''} ${p.tags || ''}`);
+                    return tokens.every(t => hay.includes(t));
+                }));
+                html = found.length
+                    ? sectionHTML(`KẾT QUẢ CHO “${escapeHtml(keyword)}”`, found)
+                    : `<div class="empty-note">Chưa tìm thấy sản phẩm phù hợp với “${escapeHtml(keyword)}”.<br>Bạn nhắn Zalo, shop tư vấn kín đáo ngay nhé!</div>`;
+            } else if (currentCategory === 'all') {
+                const promo = shuffledProducts.filter(p => p.promo);
+                const others = shuffledProducts.filter(p => !p.promo);
+                if (promo.length) html += sectionHTML('🔥 KHUYẾN MÃI HOT', promo, 'promo');
+                if (others.length) html += (promo.length ? '<div class="section-gap"></div>' : '') + sectionHTML('TẤT CẢ SẢN PHẨM', others);
+            } else if (currentCategory === 'khuyen-mai') {
+                html = sectionHTML('🔥 KHUYẾN MÃI HOT', shuffledProducts.filter(p => p.promo), 'promo');
+            } else {
+                const list = promoFirst(shuffledProducts.filter(p => p.category === currentCategory));
+                html = sectionHTML((categoryLabels[currentCategory] || 'SẢN PHẨM').toUpperCase(), list);
+            }
+            box.innerHTML = html;
+        }
+
+        function setCategory(cat) {
+            currentCategory = cat;
+            document.getElementById('searchInput').value = '';
+            syncTabs();
+            renderView();
+        }
+
+        function filterProducts() {
+            syncTabs();
+            renderView();
         }
 
         function addToCart(id) {
@@ -582,23 +672,6 @@
             });
             document.getElementById('cartItemCount').innerText = totalCount;
             document.getElementById('cartTotalPrice').innerText = totalPrice.toLocaleString() + 'đ';
-        }
-
-        function setCategory(cat) {
-            currentCategory = cat;
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-            filterProducts();
-        }
-
-        function filterProducts() {
-            const keyword = document.getElementById('searchInput').value.toLowerCase();
-            const filtered = products.filter(p => {
-                const matchCat = (currentCategory === 'all' || p.category === currentCategory);
-                const matchKey = p.name.toLowerCase().includes(keyword);
-                return matchCat && matchKey;
-            });
-            renderProducts(filtered);
         }
 
         function openCartModal() {
@@ -822,18 +895,14 @@
 
         function goToCategory(cat) {
             closeArticle();
-            currentCategory = cat;
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.toggle('active', (btn.getAttribute('onclick') || '').includes(`'${cat}'`));
-            });
-            filterProducts();
+            setCategory(cat);
             document.querySelector('.category-tabs').scrollIntoView({ behavior: 'smooth' });
         }
 
         document.addEventListener('keydown', e => { if (e.key === 'Escape') closeArticle(); });
 
         // Khởi chạy
-        renderProducts(products);
+        renderView();
         renderArticles();
     </script>
 </body>
