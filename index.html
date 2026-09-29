@@ -331,8 +331,6 @@
         }
         .cart-items-list {
             margin-bottom: 15px;
-            max-height: 250px;
-            overflow-y: auto;
             border-bottom: 2px solid #ddd;
             padding-bottom: 10px;
         }
@@ -418,13 +416,57 @@
         .promo-note { font-size: 11px; font-weight: 600; color: #d32f2f; margin-bottom: 6px; line-height: 1.3; }
         .section-gap { height: 18px; }
         .empty-note { background: #fff; padding: 25px 15px; text-align: center; border-radius: 8px; color: #555; font-size: 14px; line-height: 1.6; }
+
+        /* ===== TRANG CHI TIẾT SẢN PHẨM ===== */
+        .pd-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.65); z-index: 1200; align-items: flex-start; justify-content: center; padding: 0; overflow-y: auto; }
+        .pd-box { background: #fff; width: 100%; max-width: 560px; min-height: 100%; margin: 0 auto; position: relative; box-shadow: 0 8px 24px rgba(0,0,0,0.35); }
+        @media (min-width: 600px) { .pd-modal { padding: 30px 15px; align-items: flex-start; } .pd-box { min-height: auto; border-radius: 12px; margin-top: 20px; } }
+        .pd-close { position: absolute; top: 12px; right: 12px; width: 34px; height: 34px; border-radius: 50%; background: rgba(0,0,0,0.5); color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 20px; z-index: 5; }
+        .pd-gallery-main { width: 100%; aspect-ratio: 1 / 1; background: #eee; overflow: hidden; }
+        .pd-gallery-main img, .pd-gallery-main video { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .pd-thumbs { display: flex; gap: 8px; padding: 10px 12px; overflow-x: auto; }
+        .pd-thumb { width: 62px; height: 62px; border-radius: 6px; overflow: hidden; flex-shrink: 0; border: 2px solid transparent; cursor: pointer; background: #eee; position: relative; }
+        .pd-thumb.active { border-color: var(--primary-color); }
+        .pd-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .pd-thumb .pd-play { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.3); color: #fff; font-size: 16px; }
+        .pd-body { padding: 16px 18px 24px; }
+        .pd-title { font-size: 18px; font-weight: 800; color: #222; line-height: 1.4; margin-bottom: 8px; }
+        .pd-sold { display: inline-flex; align-items: center; gap: 6px; background: #fff4e0; color: #b26a00; font-size: 12px; font-weight: 700; padding: 5px 10px; border-radius: 15px; margin-bottom: 10px; }
+        .pd-price-row { display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px; }
+        .pd-price-row .current-price { font-size: 22px; }
+        .pd-price-row .old-price { font-size: 14px; }
+        .pd-promo-note { color: var(--red-color); font-size: 13px; font-weight: 700; margin-bottom: 14px; }
+        .pd-actions { display: flex; gap: 10px; margin-bottom: 6px; }
+        .pd-actions .btn-buy { flex: 1; padding: 13px 0; font-size: 14px; }
+        .pd-actions .btn-buy.zalo { background: var(--secondary-color); color: #fff; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 6px; }
+        .pd-section { margin-top: 22px; }
+        .pd-section h3 { font-size: 14px; font-weight: 800; color: #0b5394; text-transform: uppercase; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 2px solid #f0f0f0; }
+        .pd-usage p, .pd-usage li { font-size: 14px; color: #444; line-height: 1.7; margin-bottom: 8px; }
+        .pd-usage ul { padding-left: 18px; }
+        .pd-guide { background: #fffceb; border: 1px dashed #e0c34a; border-radius: 8px; padding: 14px 16px; }
+        .pd-guide-step { display: flex; gap: 10px; font-size: 13px; color: #444; line-height: 1.6; margin-bottom: 8px; }
+        .pd-guide-step:last-child { margin-bottom: 0; }
+        .pd-guide-step b { color: #0b5394; }
+        .pd-related-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        .pd-related-card { cursor: pointer; }
+        /* ===== Phí vận chuyển ===== */
+        .free-ship-strip { max-width: 1000px; margin: 0 auto 10px; padding: 8px 15px; background: #fff4d6; border: 1px dashed #e0b93d; border-radius: 8px; text-align: center; font-size: 12.5px; font-weight: 700; color: #8a5a00; }
+        .ship-banner { margin-top: 12px; padding: 10px 12px; border-radius: 8px; font-size: 13px; background: #fff4d6; color: #8a5a00; border: 1px dashed #e0b93d; }
+        .ship-banner-free { background: #e6f7ec; color: #157347; border: 1px dashed #57c785; font-weight: 700; }
+        .ship-zone-picker { margin-top: 10px; }
+        .ship-zone-title { font-size: 12px; font-weight: 700; color: #555; margin-bottom: 6px; }
+        .ship-zone-option { display: flex; align-items: center; gap: 8px; padding: 8px 4px; font-size: 13px; color: #333; border-bottom: 1px dashed #eee; cursor: pointer; }
+        .ship-zone-option:last-child { border-bottom: none; }
+        .ship-zone-option span:nth-child(2) { flex: 1; }
+        .ship-zone-fee { font-weight: 700; color: #0b5394; }
+        .btn-buy-now { background: var(--red-color) !important; color: #fff !important; }
     </style>
 </head>
 <body>
 
     <!-- Top Bar -->
     <div class="top-bar">
-        🔒 Bảo mật thông tin tuyệt đối - Đóng gói kín đáo 100%
+        🔒 Bảo mật thông tin tuyệt đối - Đóng gói kín đáo 100% - Giá cả cạnh tranh
     </div>
 
     <!-- Header & Search -->
@@ -439,6 +481,8 @@
     </header>
 
     <!-- 6 Danh Mục Lọc Nhanh + Tất Cả -->
+    <div class="free-ship-strip" id="freeShipStrip">🚚 Miễn phí giao hàng cho đơn từ 150.000đ</div>
+
     <div class="category-tabs">
         <button class="tab-btn active" onclick="setCategory('all')">Tất cả</button>
         <button class="tab-btn tab-hot" onclick="setCategory('khuyen-mai')">🔥 Khuyến Mãi</button>
@@ -448,6 +492,7 @@
         <button class="tab-btn" onclick="setCategory('gel-boi-tron')">Gel Bôi Trơn</button>
         <button class="tab-btn" onclick="setCategory('do-choi')">Đồ Chơi Nam</button>
         <button class="tab-btn" onclick="setCategory('vong-deo')">Vòng Đeo Hỗ Trợ</button>
+        <button class="tab-btn" onclick="setCategory('quan-lot-nam')">Quần Lót Nam</button>
     </div>
 
     <!-- Main Container -->
@@ -471,6 +516,16 @@
     <a href="https://zalo.me/0913553362" target="_blank" rel="noopener" class="zalo-float"><i class="fa-solid fa-comment-dots"></i> CHAT ZALO NGAY</a>
 
     <!-- Popup đọc bài viết -->
+    <!-- Popup Chi Tiết Sản Phẩm -->
+    <div class="pd-modal" id="productDetailModal" onclick="if(event.target===this) closeProductDetail()">
+        <div class="pd-box">
+            <div class="pd-close" onclick="closeProductDetail()">&times;</div>
+            <div class="pd-gallery-main" id="pdGalleryMain"></div>
+            <div class="pd-thumbs" id="pdThumbs"></div>
+            <div class="pd-body" id="pdBody"></div>
+        </div>
+    </div>
+
     <div class="art-modal" id="articleModal" onclick="if(event.target===this) closeArticle()">
         <div class="art-box">
             <div class="art-close" onclick="closeArticle()">&times;</div>
@@ -514,6 +569,10 @@
                     <label>Địa Chỉ Nhận Hàng (Che tên kín đáo)</label>
                     <textarea id="cusAddress" class="form-control" rows="2" required placeholder="Số nhà, đường, phường/xã..."></textarea>
                 </div>
+                <div class="form-group">
+                    <label>Ghi Chú Thêm (không bắt buộc)</label>
+                    <textarea id="cusNote" class="form-control" rows="2" placeholder="VD: chọn size M, màu đen, giao giờ hành chính..."></textarea>
+                </div>
                 <button type="submit" class="btn-submit">XÁC NHẬN ĐẶT MUA NGAY</button>
             </form>
         </div>
@@ -527,7 +586,7 @@
         // promoNote: "..."       -> dòng chữ đỏ nhỏ (tặng kèm, freeship...), có hoặc không đều được
         // video: "images/x.mp4"  -> (tùy chọn) video sản phẩm, img sẽ làm ảnh bìa video
         // tags: "tu khoa khac"   -> (tùy chọn) từ khóa phụ để khách tìm kiếm ra sản phẩm
-        const products = [
+        let products = [
             { id: 1, promo: true, promoNote: "🎁 Tặng kèm 1 gel bôi trơn mini", name: "Combo 5 Hộp Thuốc Cương Cứng Adenafil", category: "cuong-cung", price: 350000, oldPrice: 490000, badge: "-28% HOT", img: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=300&q=80" },
             { id: 2, name: "Viên Uống Hỗ Trợ Cương Cứng Cấp Tốc", category: "cuong-cung", price: 250000, oldPrice: 350000, badge: "HOT", img: "https://images.unsplash.com/photo-1471864190281-a93a3070b6de?auto=format&fit=crop&w=300&q=80" },
             { id: 3, name: "Tinh Dầu Popper Rush Gốc Siêu Mạnh", category: "popper", price: 220000, oldPrice: 300000, badge: "BÁN CHẠY", img: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?auto=format&fit=crop&w=300&q=80" },
@@ -535,13 +594,34 @@
             { id: 5, name: "Bao Cao Su Gân Gai Nhiều Bi Tròn", category: "bao-cao-su", price: 199000, oldPrice: 280000, badge: "-29%", img: "https://images.unsplash.com/photo-1555685812-4b943f1cb0eb?auto=format&fit=crop&w=300&q=80" },
             { id: 6, name: "Bao Cao Su Siêu Mỏng Ôm Khít Tự Nhiên", category: "bao-cao-su", price: 150000, oldPrice: 200000, badge: "CHÍNH HÃNG", img: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=300&q=80" },
             { id: 7, promo: true, promoNote: "🎁 Mua 1 tặng 1", name: "Gel Bôi Trơn Nhật Bản Gốc Nước 200ml", category: "gel-boi-tron", price: 199000, oldPrice: 280000, badge: "MUA 1 TẶNG 1", img: "https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=300&q=80" },
-            { id: 8, name: "Gel Bôi Trơn Silicone Chuyên Dụng Anal", category: "gel-boi-tron", price: 250000, oldPrice: 350000, badge: "CAO CẤP", img: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=300&q=80" },
-            { id: 9, name: "Máy Sục Tự Động Nhiều Chế Độ Thông Minh", category: "do-choi", price: 690000, oldPrice: 960000, badge: "-28%", img: "https://images.unsplash.com/photo-1583912267670-6575cb47231f?auto=format&fit=crop&w=300&q=80" },
+            { id: 8, name: "Gel Bôi Trơn Silicone Chuyên Dụng Anal", category: "gel-boi-tron", price: 250000, oldPrice: 350000, badge: "CAO CẤP", img: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=300&q=80",
+              images: ["https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=500&q=80","https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=500&q=80","https://images.unsplash.com/photo-1571781926291-c477ebfd024b?auto=format&fit=crop&w=500&q=80"],
+              sold: "3.2k", usage: ["Vệ sinh sạch tay và vùng sử dụng trước khi dùng.","Lấy một lượng gel vừa đủ ra tay hoặc lên đồ chơi, bôi đều, có thể thêm nếu thấy khô.","Không dùng chung với đồ chơi bằng silicone. Sau khi dùng, đậy nắp kín và bảo quản nơi khô ráo."] },
+            { id: 9, name: "Máy Sục Tự Động Nhiều Chế Độ Thông Minh", category: "do-choi", price: 690000, oldPrice: 960000, badge: "-28%", img: "https://images.unsplash.com/photo-1583912267670-6575cb47231f?auto=format&fit=crop&w=300&q=80",
+              images: ["https://images.unsplash.com/photo-1583912267670-6575cb47231f?auto=format&fit=crop&w=500&q=80","https://images.unsplash.com/photo-1584017911766-d451b3d0e843?auto=format&fit=crop&w=500&q=80","https://images.unsplash.com/photo-1608248597261-e4d09123317a?auto=format&fit=crop&w=500&q=80"],
+              video: "https://assets.mixkit.co/videos/preview/mixkit-circuit-board-details-4322-large.mp4",
+              sold: "4.2k", usage: ["Sạc đầy pin qua cổng USB trước lần dùng đầu tiên (khoảng 1-2 giờ).","Bôi gel bôi trơn gốc nước vào đầu máy, chọn chế độ rung phù hợp bằng nút bấm.","Vệ sinh bằng nước ấm sau khi dùng, lau khô rồi cất nơi kín đáo. Bảo hành động cơ 12 tháng."] },
             { id: 10, promo: true, promoNote: "🚚 Miễn phí giao hàng", name: "Trứng Rung Mini Điều Khiển Kín Đáo", category: "do-choi", price: 180000, oldPrice: 250000, badge: "HOT", img: "https://images.unsplash.com/photo-1555685812-4b943f1cb0eb?auto=format&fit=crop&w=300&q=80" },
             { id: 11, name: "Vòng Đeo Silicon Đàn Hồi Kéo Dài Thời Gian", category: "vong-deo", price: 130000, oldPrice: 180000, badge: "TIỆN LỢI", img: "https://images.unsplash.com/photo-1516574187841-cb9cc2ca948b?auto=format&fit=crop&w=300&q=80" },
-            { id: 12, name: "Vòng Đeo Tay Từ Tính Hỗ Trợ Nam Tính", category: "vong-deo", price: 220000, oldPrice: 300000, badge: "VIP", img: "https://images.unsplash.com/photo-1516574187841-cb9cc2ca948b?auto=format&fit=crop&w=300&q=80" }
+            { id: 12, name: "Vòng Đeo Tay Từ Tính Hỗ Trợ Nam Tính", category: "vong-deo", price: 220000, oldPrice: 300000, badge: "VIP", img: "https://images.unsplash.com/photo-1516574187841-cb9cc2ca948b?auto=format&fit=crop&w=300&q=80" },
+            { id: 13, name: "Quần Lót Nam Boxer Thoáng Khí Ôm Dáng", category: "quan-lot-nam", price: 129000, oldPrice: 179000, badge: "-28%",
+              img: "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=500",
+              images: ["https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=500","https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500"],
+              sold: "2.1k", usage: ["Chất liệu cotton pha thun co giãn 4 chiều, thoáng khí, thấm hút tốt.","Có sẵn nhiều size, xem bảng size trong ảnh sản phẩm để chọn đúng vòng eo.","Giặt tay hoặc giặt máy ở chế độ nhẹ, không dùng chất tẩy mạnh để giữ độ bền vải."] }
         ];
 
+        // =========================================================================
+        // PHÍ VẬN CHUYỂN: anh có thể tự đổi số tiền hoặc thêm/bớt khu vực ở đây.
+        // Đơn hàng (chưa tính ship) từ mức này trở lên -> miễn phí ship.
+        const FREE_SHIP_THRESHOLD = 150000;
+        const SHIPPING_ZONES = [
+            { id: 'noi-thanh', label: 'Nội thành (giao nhanh)', fee: 20000 },
+            { id: 'can-trung-tam', label: 'Cận trung tâm / Ngoại thành', fee: 25000 },
+            { id: 'tinh-xa', label: 'Tỉnh khác / Xa', fee: 30000 }
+        ];
+        // =========================================================================
+
+        let currentShippingZoneId = SHIPPING_ZONES[0].id;
         let cart = [];
         let currentCategory = 'all';
 
@@ -552,7 +632,8 @@
             'bao-cao-su': 'Bao Cao Su',
             'gel-boi-tron': 'Gel Bôi Trơn',
             'do-choi': 'Đồ Chơi Nam',
-            'vong-deo': 'Vòng Đeo Hỗ Trợ'
+            'vong-deo': 'Vòng Đeo Hỗ Trợ',
+            'quan-lot-nam': 'Quần Lót Nam'
         };
 
         function normalizeText(t) {
@@ -570,18 +651,24 @@
             return a;
         }
         // Thứ tự ngẫu nhiên: mỗi lần khách mở trang sẽ khác, nhưng giữ nguyên khi khách bấm lọc/tìm kiếm
-        const shuffledProducts = shuffle(products);
+        let shuffledProducts = shuffle(products);
+        window.shuffledProducts = shuffledProducts;
 
+        function productThumbUrl(p) {
+            return (p.images && p.images[0]) || p.img;
+        }
         function productCardHTML(p) {
-            const media = p.video
-                ? `<video src="${p.video}" poster="${p.img}" class="product-img" controls playsinline preload="none"></video>`
-                : `<img src="${p.img}" class="product-img" alt="${escapeHtml(p.name)}" loading="lazy">`;
+            const thumb = productThumbUrl(p);
             return `
                 <div class="product-card">
                     ${p.badge ? `<div class="badge-sale">${p.badge}</div>` : ''}
-                    ${media}
-                    <div class="product-info">
-                        <div class="product-title">${p.name}</div>
+                    <div onclick="openProductDetail(${p.id})" style="cursor:pointer;">
+                        <img src="${thumb}" class="product-img" alt="${escapeHtml(p.name)}" loading="lazy">
+                        <div class="product-info">
+                            <div class="product-title">${p.name}</div>
+                        </div>
+                    </div>
+                    <div class="product-info" style="padding-top:0;">
                         ${p.promoNote ? `<div class="promo-note">${p.promoNote}</div>` : ''}
                         <div class="price-box">
                             <span class="current-price">${p.price.toLocaleString()}đ</span>
@@ -651,7 +738,91 @@
             renderView();
         }
 
-        function addToCart(id) {
+        // ===== TRANG CHI TIẾT SẢN PHẨM =====
+        function productMediaList(p) {
+            // Ghép ảnh + video thành 1 danh sách slide để hiển thị gallery
+            const imgs = (p.images && p.images.length) ? p.images : [p.img];
+            const slides = imgs.map(src => ({ type: 'image', src }));
+            if (p.video) slides.push({ type: 'video', src: p.video, poster: imgs[0] });
+            return slides;
+        }
+
+        function pdShowSlide(index) {
+            const p = products.find(x => x.id === window.__pdCurrentId);
+            const slides = productMediaList(p);
+            const s = slides[index] || slides[0];
+            document.getElementById('pdGalleryMain').innerHTML = s.type === 'video'
+                ? `<video src="${s.src}" poster="${s.poster || ''}" controls playsinline></video>`
+                : `<img src="${s.src}" alt="${escapeHtml(p.name)}">`;
+            document.querySelectorAll('.pd-thumb').forEach((el, i) => el.classList.toggle('active', i === index));
+        }
+
+        function openProductDetail(id) {
+            const p = products.find(x => x.id === id);
+            if (!p) return;
+            window.__pdCurrentId = id;
+            const slides = productMediaList(p);
+
+            document.getElementById('pdThumbs').innerHTML = slides.map((s, i) => `
+                <div class="pd-thumb ${i === 0 ? 'active' : ''}" onclick="pdShowSlide(${i})">
+                    <img src="${s.type === 'video' ? (s.poster || '') : s.src}" alt="">
+                    ${s.type === 'video' ? '<div class="pd-play"><i class="fa-solid fa-play"></i></div>' : ''}
+                </div>`).join('');
+            pdShowSlide(0);
+
+            const related = shuffle(products.filter(x => x.category === p.category && x.id !== p.id)).slice(0, 4);
+
+            document.getElementById('pdBody').innerHTML = `
+                <div class="pd-title">${p.name}</div>
+                <div class="pd-sold"><i class="fa-solid fa-cart-shopping"></i> Đã bán: ${p.sold || '1k+'} sản phẩm</div>
+                <div class="pd-price-row price-box">
+                    <span class="current-price">${p.price.toLocaleString()}đ</span>
+                    ${p.oldPrice ? `<span class="old-price">${p.oldPrice.toLocaleString()}đ</span>` : ''}
+                </div>
+                ${p.promoNote ? `<div class="pd-promo-note">${p.promoNote}</div>` : ''}
+                <div class="pd-actions">
+                    <button class="btn-buy" onclick="addToCart(${p.id})">THÊM VÀO GIỎ</button>
+                    <button class="btn-buy btn-buy-now" onclick="buyNow(${p.id})">MUA NGAY</button>
+                </div>
+                <div class="pd-actions">
+                    <a class="btn-buy zalo" href="https://zalo.me/0913553362" target="_blank" rel="noopener"><i class="fa-solid fa-comment-dots"></i> HỎI NHANH QUA ZALO</a>
+                </div>
+
+                ${p.usage && p.usage.length ? `
+                <div class="pd-section pd-usage">
+                    <h3>Hướng dẫn sử dụng</h3>
+                    ${p.usage.map(t => `<p>${t}</p>`).join('')}
+                </div>` : ''}
+
+                <div class="pd-section">
+                    <h3>Hướng dẫn mua hàng</h3>
+                    <div class="pd-guide">
+                        <div class="pd-guide-step"><b>Bước 1:</b> Bấm nút “Thêm vào giỏ”. Muốn mua thêm món khác thì tiếp tục chọn sản phẩm khác.</div>
+                        <div class="pd-guide-step"><b>Bước 2:</b> Bấm giỏ hàng ở góc phải, kiểm tra lại đơn rồi điền Họ tên, Số điện thoại, Địa chỉ.</div>
+                        <div class="pd-guide-step"><b>Bước 3:</b> Bấm “Xác nhận đặt mua”. Shop sẽ gọi lại xác nhận và đóng gói kín đáo trước khi giao.</div>
+                        <div class="pd-guide-step"><i class="fa-solid fa-comment-dots"></i> Muốn nhanh gọn hoặc cần tư vấn thêm, nhắn Zalo <b>0913 553 362</b> để được chốt đơn trực tiếp.</div>
+                    </div>
+                </div>
+
+                ${related.length ? `
+                <div class="pd-section">
+                    <h3>Sản phẩm liên quan</h3>
+                    <div class="pd-related-grid">${related.map(r => `
+                        <div class="pd-related-card" onclick="openProductDetail(${r.id})">
+                            ${productCardHTML(r)}
+                        </div>`).join('')}</div>
+                </div>` : ''}
+            `;
+
+            document.getElementById('productDetailModal').style.display = 'flex';
+            document.getElementById('productDetailModal').scrollTop = 0;
+        }
+
+        function closeProductDetail() {
+            document.getElementById('productDetailModal').style.display = 'none';
+        }
+
+        function addToCart(id, silent) {
             const product = products.find(p => p.id === id);
             const existing = cart.find(item => item.id === id);
             if (existing) {
@@ -660,7 +831,13 @@
                 cart.push({ ...product, quantity: 1 });
             }
             updateCartUI();
-            alert(`Đã thêm "${product.name}" vào giỏ hàng!`);
+            if (!silent) alert(`Đã thêm "${product.name}" vào giỏ hàng!`);
+        }
+
+        function buyNow(id) {
+            addToCart(id, true);
+            closeProductDetail();
+            openCartModal();
         }
 
         function updateCartUI() {
@@ -674,36 +851,78 @@
             document.getElementById('cartTotalPrice').innerText = totalPrice.toLocaleString() + 'đ';
         }
 
-        function openCartModal() {
-            if (cart.length === 0) {
-                alert('Giỏ hàng của anh đang trống! Vui lòng chọn sản phẩm trước khi thanh toán.');
-                return;
-            }
+        function calcShippingInfo(subtotal) {
+            const free = subtotal >= FREE_SHIP_THRESHOLD;
+            const zone = SHIPPING_ZONES.find(z => z.id === currentShippingZoneId) || SHIPPING_ZONES[0];
+            return { free, zone, fee: free ? 0 : zone.fee };
+        }
+
+        function setShippingZone(id) {
+            currentShippingZoneId = id;
+            renderCartModal();
+        }
+
+        function renderCartModal() {
             const listContainer = document.getElementById('cartItemsList');
             let listHtml = '';
-            let totalPrice = 0;
+            let subtotal = 0;
 
-            // Render từng món hàng
             cart.forEach(item => {
-                let itemTotal = item.price * item.quantity;
-                totalPrice += itemTotal;
+                const itemTotal = item.price * item.quantity;
+                subtotal += itemTotal;
                 listHtml += `
                     <div class="cart-item-row">
-                        <span><b>${item.name}</b> (x${item.quantity})</span>
+                        <span><b>${escapeHtml(item.name)}</b> (x${item.quantity})</span>
                         <span style="color: #666;">${itemTotal.toLocaleString()}đ</span>
                     </div>
                 `;
             });
 
-            // Thêm dòng TỔNG CỘNG bự chà bá vào dưới cùng
+            const { free, zone, fee } = calcShippingInfo(subtotal);
+
+            if (free) {
+                listHtml += `<div class="ship-banner ship-banner-free">🎉 Đơn hàng được <b>MIỄN PHÍ SHIP</b>!</div>`;
+            } else {
+                const remain = FREE_SHIP_THRESHOLD - subtotal;
+                listHtml += `
+                    <div class="ship-banner">Mua thêm <b>${remain.toLocaleString()}đ</b> nữa để được <b>MIỄN PHÍ SHIP</b> (đơn từ ${FREE_SHIP_THRESHOLD.toLocaleString()}đ)</div>
+                    <div class="ship-zone-picker">
+                        <div class="ship-zone-title">Chọn khu vực giao hàng:</div>
+                        ${SHIPPING_ZONES.map(z => `
+                            <label class="ship-zone-option">
+                                <input type="radio" name="shipZone" value="${z.id}" ${z.id === currentShippingZoneId ? 'checked' : ''} onchange="setShippingZone('${z.id}')">
+                                <span>${z.label}</span>
+                                <span class="ship-zone-fee">${z.fee.toLocaleString()}đ</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                `;
+            }
+
             listHtml += `
-                <div class="cart-total-row">
-                    <span>TỔNG THANH TOÁN:</span>
-                    <span style="color: #e53935; font-size: 18px;">${totalPrice.toLocaleString()}đ</span>
+                <div class="cart-total-row" style="flex-direction: column; align-items: stretch; gap: 5px;">
+                    <div style="display:flex; justify-content:space-between; font-size:13px; color:#666; font-weight:normal;">
+                        <span>Tạm tính</span><span>${subtotal.toLocaleString()}đ</span>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; font-size:13px; color:#666; font-weight:normal;">
+                        <span>Phí vận chuyển${free ? '' : ' (' + zone.label + ')'}</span><span>${fee === 0 ? 'Miễn phí' : fee.toLocaleString() + 'đ'}</span>
+                    </div>
+                    <div style="display:flex; justify-content:space-between;">
+                        <span>TỔNG THANH TOÁN:</span>
+                        <span style="color: #e53935; font-size: 18px;">${(subtotal + fee).toLocaleString()}đ</span>
+                    </div>
                 </div>
             `;
-            
+
             listContainer.innerHTML = listHtml;
+        }
+
+        function openCartModal() {
+            if (cart.length === 0) {
+                alert('Giỏ hàng của anh đang trống! Vui lòng chọn sản phẩm trước khi thanh toán.');
+                return;
+            }
+            renderCartModal();
             document.getElementById('checkoutModal').style.display = 'flex';
         }
 
@@ -723,10 +942,19 @@
             const name = document.getElementById('cusName').value;
             const phone = document.getElementById('cusPhone').value;
             const address = document.getElementById('cusAddress').value;
+            const note = document.getElementById('cusNote').value.trim();
 
-            // Tổng hợp thông tin
+            // Tổng hợp thông tin (đã gồm phí vận chuyển)
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const { free, zone, fee } = calcShippingInfo(subtotal);
+            const grandTotal = subtotal + fee;
+
             let productSummary = cart.map(item => `- ${item.name} (x${item.quantity})`).join('\n');
-            let totalPriceVal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toLocaleString() + 'đ';
+            if (note) productSummary += `\n- Ghi chú của khách: ${note}`;
+            productSummary += free
+                ? `\n- Phí vận chuyển: Miễn phí (đơn từ ${FREE_SHIP_THRESHOLD.toLocaleString()}đ)`
+                : `\n- Phí vận chuyển (${zone.label}): ${fee.toLocaleString()}đ`;
+            let totalPriceVal = grandTotal.toLocaleString() + 'đ';
 
             const scriptURL = 'https://script.google.com/macros/s/AKfycbwcRkl04j54oZJL2Eg_HVcYxytfw8DTmZGVv1C4UyRM6UvN5kc5a-76FKMWuCCJI3qfqA/exec';
 
@@ -899,11 +1127,184 @@
             document.querySelector('.category-tabs').scrollIntoView({ behavior: 'smooth' });
         }
 
-        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeArticle(); });
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeArticle(); closeProductDetail(); } });
+
+        // =========================================================================
+        // ĐỒNG BỘ SẢN PHẨM TỪ GOOGLE SHEET (không bắt buộc)
+        // Cách bật: tạo Google Sheet theo mẫu, Xuất bản lên web dạng CSV,
+        // rồi dán link CSV đó vào giữa hai dấu nháy đơn bên dưới.
+        // Để trống thì web vẫn chạy bình thường với danh sách sản phẩm có sẵn ở trên.
+        const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRqwev-Dd6wZD_3GhlT41RL66ndY2g971UFe__9Vzvscc8j6J7ZH3Wbc9pNi1KXOgqi7lTBvotPqID8/pub?gid=781784600&single=true&output=csv';
+        // =========================================================================
+
+        const NO_IMAGE_PLACEHOLDER = 'data:image/svg+xml;utf8,' + encodeURIComponent(
+            '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400"><rect width="100%" height="100%" fill="%23eeeeee"/><text x="50%" y="50%" font-size="20" fill="%23999" text-anchor="middle" dy=".3em">Chưa có ảnh</text></svg>'
+        );
+
+        // Bộ tra cứu: tên nhóm (không dấu) -> mã nhóm dùng trong web
+        const categoryLookup = {};
+        Object.keys(categoryLabels).forEach(id => { categoryLookup[normalizeText(categoryLabels[id])] = id; });
+
+        function findCategoryId(rawLabel) {
+            const norm = normalizeText(rawLabel).trim();
+            if (categoryLookup[norm]) return categoryLookup[norm];
+            const found = Object.keys(categoryLookup).find(k => k.includes(norm) || norm.includes(k));
+            return found ? categoryLookup[found] : 'khac';
+        }
+
+        function parseMoney(text) {
+            const digits = String(text || '').replace(/[^\d]/g, '');
+            return digits ? parseInt(digits, 10) : 0;
+        }
+
+        // Tự tạo giá cũ (giá gạch ngang) khi anh để trống ô "Giá Cũ" trong Sheet.
+        // Mỗi sản phẩm lệch % khác nhau (20% - 35%) để trông tự nhiên như hàng thật,
+        // không phải sản phẩm nào cũng giảm cùng 1 mức. Làm tròn đến 10.000đ cho gọn.
+        function autoOldPrice(price) {
+            if (!price) return 0;
+            const percent = 0.20 + Math.random() * 0.15; // ngẫu nhiên 20% -> 35%
+            let old = Math.round((price * (1 + percent)) / 10000) * 10000;
+            if (old <= price) old = price + 10000;
+            return old;
+        }
+
+        // Cho phép anh chủ động ghi "0", "-", "khong" vào ô Giá Cũ nếu KHÔNG muốn hiện giá gạch ngang.
+        function isNoDiscountMark(text) {
+            const n = normalizeText(text).trim();
+            return ['0', '-', 'khong', 'ko', 'none'].includes(n);
+        }
+
+        function isTruthyCell(text) {
+            const n = normalizeText(text).trim();
+            return ['x', 'co', 'yes', '1', 'true', 'dung'].includes(n);
+        }
+
+        // Phân tách nội dung CSV, hỗ trợ ô có dấu phẩy, dấu ngoặc kép và xuống dòng bên trong ô
+        function parseCSV(text) {
+            const rows = [];
+            let row = [], field = '', inQuotes = false;
+            for (let i = 0; i < text.length; i++) {
+                const c = text[i], next = text[i + 1];
+                if (inQuotes) {
+                    if (c === '"' && next === '"') { field += '"'; i++; }
+                    else if (c === '"') { inQuotes = false; }
+                    else { field += c; }
+                } else if (c === '"') {
+                    inQuotes = true;
+                } else if (c === ',') {
+                    row.push(field); field = '';
+                } else if (c === '\n' || c === '\r') {
+                    if (c === '\r' && next === '\n') i++;
+                    row.push(field); field = '';
+                    rows.push(row); row = [];
+                } else {
+                    field += c;
+                }
+            }
+            if (field.length || row.length) { row.push(field); rows.push(row); }
+            return rows.filter(r => r.length && r.some(c => c.trim() !== ''));
+        }
+
+        function recomputeShuffled() {
+            shuffledProducts = shuffle(products);
+        }
+
+        // Đọc theo TÊN cột (tiêu đề dòng 1), nên anh đổi thứ tự cột trong Sheet vẫn chạy được,
+        // miễn giữ đúng chữ tiêu đề như trong file mẫu google-sheet-mau-san-pham.csv
+        async function loadProductsFromSheet() {
+            if (!SHEET_CSV_URL) return;
+            try {
+                const sep = SHEET_CSV_URL.includes('?') ? '&' : '?';
+                const res = await fetch(SHEET_CSV_URL + sep + 't=' + Date.now());
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                const csvText = (await res.text()).replace(/^\uFEFF/, '');
+                const rows = parseCSV(csvText);
+                if (rows.length < 2) return;
+
+                const header = rows[0].map(h => normalizeText(h).trim());
+                const col = name => header.indexOf(name);
+                const idx = {
+                    stt: col('stt'),
+                    cat: col('nhom san pham'),
+                    name: col('ten san pham'),
+                    price: col('gia ban'),
+                    oldPrice: col('gia cu'),
+                    badge: col('nhan'),
+                    promo: col('khuyen mai'),
+                    promoNote: col('ghi chu khuyen mai'),
+                    sold: col('da ban'),
+                    img1: col('anh 1'),
+                    img2: col('anh 2'),
+                    img3: col('anh 3'),
+                    video: col('video'),
+                    usage: col('huong dan su dung'),
+                    tags: col('tu khoa tim kiem')
+                };
+                if (idx.name === -1 || idx.price === -1) {
+                    console.warn('Sheet thiếu cột "Tên Sản Phẩm" hoặc "Giá Bán", dùng dữ liệu mẫu có sẵn.');
+                    return;
+                }
+
+                const get = (r, i) => (i >= 0 && r[i] !== undefined) ? r[i].trim() : '';
+                const newProducts = [];
+                for (let i = 1; i < rows.length; i++) {
+                    const r = rows[i];
+                    const name = get(r, idx.name);
+                    if (!name) continue;
+                    const images = [get(r, idx.img1), get(r, idx.img2), get(r, idx.img3)].filter(Boolean);
+                    const price = parseMoney(get(r, idx.price));
+                    const oldPriceCell = idx.oldPrice !== -1 ? get(r, idx.oldPrice) : '';
+                    let oldPrice;
+                    if (isNoDiscountMark(oldPriceCell)) {
+                        oldPrice = 0; // anh chủ động ghi 0/-/khong -> không hiện giá cũ
+                    } else if (oldPriceCell.trim() === '') {
+                        oldPrice = autoOldPrice(price); // để trống -> tự tạo giá cũ hợp lý
+                    } else {
+                        oldPrice = parseMoney(oldPriceCell);
+                        if (oldPrice <= price) oldPrice = autoOldPrice(price); // ghi sai (thấp hơn giá bán) -> tự sửa
+                    }
+
+                    newProducts.push({
+                        id: idx.stt !== -1 && get(r, idx.stt) ? parseInt(get(r, idx.stt), 10) || (i + 1000) : (i + 1000),
+                        name: name,
+                        category: idx.cat !== -1 ? findCategoryId(get(r, idx.cat)) : 'khac',
+                        price: price,
+                        oldPrice: oldPrice,
+                        badge: get(r, idx.badge) || '',
+                        promo: idx.promo !== -1 ? isTruthyCell(get(r, idx.promo)) : false,
+                        promoNote: get(r, idx.promoNote) || '',
+                        sold: get(r, idx.sold) || '',
+                        img: images[0] || NO_IMAGE_PLACEHOLDER,
+                        images: images.length ? images : [NO_IMAGE_PLACEHOLDER],
+                        video: get(r, idx.video) || '',
+                        usage: idx.usage !== -1 ? get(r, idx.usage).split('\n').map(t => t.trim()).filter(Boolean) : [],
+                        tags: get(r, idx.tags) || ''
+                    });
+                }
+
+                if (newProducts.length) {
+                    products = newProducts;
+                    recomputeShuffled();
+                    renderView();
+                    console.log('Đã đồng bộ ' + newProducts.length + ' sản phẩm từ Google Sheet.');
+                }
+            } catch (err) {
+                console.warn('Không tải được dữ liệu từ Google Sheet, web vẫn dùng danh sách sản phẩm có sẵn.', err);
+            }
+        }
 
         // Khởi chạy
-        renderView();
+        // Nếu đã bật SHEET_CSV_URL: đợi tải xong dữ liệu thật rồi mới hiện sản phẩm,
+        // tránh bị nhấp nháy 1 chút sản phẩm mẫu trước khi đổi qua dữ liệu thật.
+        // Nếu chưa bật (SHEET_CSV_URL rỗng): hiện ngay danh sách mẫu có sẵn.
+        if (SHEET_CSV_URL) {
+            document.getElementById('productSections').innerHTML = '<div class="empty-note">Đang tải danh sách sản phẩm...</div>';
+            loadProductsFromSheet().finally(renderView);
+        } else {
+            renderView();
+        }
         renderArticles();
+        document.getElementById('freeShipStrip').innerText = `🚚 Miễn phí giao hàng cho đơn từ ${FREE_SHIP_THRESHOLD.toLocaleString()}đ`;
     </script>
 </body>
 </html>
