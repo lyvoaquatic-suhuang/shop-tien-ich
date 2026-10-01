@@ -451,6 +451,14 @@
         .pd-related-card { cursor: pointer; }
         /* ===== Phí vận chuyển ===== */
         .free-ship-strip { max-width: 1000px; margin: 0 auto 10px; padding: 8px 15px; background: #fff4d6; border: 1px dashed #e0b93d; border-radius: 8px; text-align: center; font-size: 12.5px; font-weight: 700; color: #8a5a00; }
+        .pay-box { margin-top: 14px; padding: 14px 12px; border: 2px solid #0b5394; border-radius: 10px; background: #f0f7ff; text-align: center; }
+        .pay-title { font-size: 14px; font-weight: 800; color: #0b5394; line-height: 1.4; margin-bottom: 10px; }
+        .pay-qr { width: 100%; max-width: 260px; height: auto; border-radius: 8px; background: #fff; border: 1px solid #dbe7f5; }
+        .pay-bank { margin-top: 8px; font-size: 13px; color: #222; line-height: 1.6; }
+        .pay-bank b { font-size: 15px; letter-spacing: 0.5px; }
+        .pay-copy { margin-top: 6px; padding: 7px 16px; border: 1px solid #0b5394; background: #fff; color: #0b5394; border-radius: 18px; font-size: 12px; font-weight: 700; cursor: pointer; }
+        .pay-note { margin-top: 10px; font-size: 12.5px; color: #444; line-height: 1.5; }
+        .pay-note a { color: var(--secondary-color); font-weight: 700; text-decoration: none; }
         .ship-banner { margin-top: 12px; padding: 10px 12px; border-radius: 8px; font-size: 13px; background: #fff4d6; color: #8a5a00; border: 1px dashed #e0b93d; }
         .ship-banner-free { background: #e6f7ec; color: #157347; border: 1px dashed #57c785; font-weight: 700; }
         .ship-zone-picker { margin-top: 10px; }
@@ -620,6 +628,14 @@
             { id: 'tinh-xa', label: 'Tỉnh khác / Xa', fee: 30000 }
         ];
         // =========================================================================
+
+        // THÔNG TIN NGÂN HÀNG (dùng để tạo mã QR tự điền sẵn số tiền + nội dung chuyển khoản)
+        const BANK_ID = 'VCB';
+        const BANK_ACCOUNT = '0621003859124';
+        const BANK_ACCOUNT_NAME = 'VO MINH LY';
+        const BANK_LABEL = 'Vietcombank';
+        const QR_FALLBACK_IMG = 'images/qr-vietcombank.jpg'; // QR tĩnh dự phòng nếu QR tự tạo không tải được
+        const ZALO_PHONE = '0913553362';
 
         let currentShippingZoneId = SHIPPING_ZONES[0].id;
         let cart = [];
@@ -914,8 +930,66 @@
                 </div>
             `;
 
+            listHtml += `
+                <div class="pay-box">
+                    <div class="pay-title">Chuyển khoản trước để đơn được ưu tiên xử lý và gửi sớm nhất.</div>
+                    <img id="payQrImg" class="pay-qr" alt="Mã QR chuyển khoản" onerror="payQrFallback(this)">
+                    <div class="pay-bank">
+                        ${BANK_LABEL} – ${BANK_ACCOUNT_NAME}<br>
+                        STK: <b>${BANK_ACCOUNT}</b><br>
+                        <span id="payAmountText"></span>
+                    </div>
+                    <button type="button" class="pay-copy" onclick="copyBankAccount(this)"><i class="fa-regular fa-copy"></i> Sao chép số tài khoản</button>
+                    <div class="pay-note">Chuyển xong, bạn có thể gửi ảnh biên lai qua <a href="https://zalo.me/${ZALO_PHONE}" target="_blank" rel="noopener">Zalo ${ZALO_PHONE}</a> để được xử lý nhanh hơn. (Không bắt buộc, bạn cũng có thể chọn thanh toán khi nhận hàng.)</div>
+                </div>
+            `;
+
             listContainer.innerHTML = listHtml;
+            updatePayQR();
         }
+
+        function getGrandTotal() {
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            return subtotal + calcShippingInfo(subtotal).fee;
+        }
+
+        // Tạo mã QR VietQR tự điền sẵn số tiền + nội dung (nội dung = số điện thoại khách nhập)
+        function updatePayQR() {
+            const img = document.getElementById('payQrImg');
+            if (!img) return;
+            const total = getGrandTotal();
+            const phoneEl = document.getElementById('cusPhone');
+            const phone = phoneEl ? phoneEl.value.replace(/\D/g, '') : '';
+            const info = phone ? 'DH ' + phone : 'DAT HANG';
+            const url = 'https://img.vietqr.io/image/' + BANK_ID + '-' + BANK_ACCOUNT + '-compact2.png'
+                + '?amount=' + total + '&addInfo=' + encodeURIComponent(info)
+                + '&accountName=' + encodeURIComponent(BANK_ACCOUNT_NAME);
+            img.dataset.fallback = '';
+            if (img.getAttribute('src') !== url) img.src = url;
+            const amt = document.getElementById('payAmountText');
+            if (amt) amt.innerHTML = 'Số tiền: <b style="color:#e53935;">' + total.toLocaleString() + 'đ</b><br>Nội dung: <b>' + info + '</b>';
+        }
+
+        function payQrFallback(img) {
+            if (img.dataset.fallback === '1') return; // tránh lặp vô hạn
+            img.dataset.fallback = '1';
+            img.src = QR_FALLBACK_IMG;
+            const amt = document.getElementById('payAmountText');
+            if (amt) amt.innerHTML = 'Số tiền: <b style="color:#e53935;">' + getGrandTotal().toLocaleString() + 'đ</b><br>Nội dung: <b>số điện thoại đặt hàng</b>';
+        }
+
+        function copyBankAccount(btn) {
+            const done = () => { btn.innerText = 'Đã sao chép ✓'; setTimeout(() => { btn.innerHTML = '<i class="fa-regular fa-copy"></i> Sao chép số tài khoản'; }, 1800); };
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(BANK_ACCOUNT).then(done).catch(() => alert('Số tài khoản: ' + BANK_ACCOUNT));
+            } else {
+                alert('Số tài khoản: ' + BANK_ACCOUNT);
+            }
+        }
+
+        document.addEventListener('input', function (e) {
+            if (e.target && e.target.id === 'cusPhone') updatePayQR();
+        });
 
         function openCartModal() {
             if (cart.length === 0) {
@@ -971,7 +1045,7 @@
                 body: data 
             })
             .then(response => {
-                alert('Đặt hàng thành công! Đã gửi thông tin đơn hàng về hệ thống.');
+                alert('Đặt hàng thành công! Đã gửi thông tin đơn hàng về hệ thống.\nNếu bạn đã chuyển khoản, nhắn ảnh biên lai qua Zalo ' + ZALO_PHONE + ' để shop xử lý nhanh hơn nhé!');
                 cart = [];
                 updateCartUI();
                 closeCartModal();
