@@ -451,6 +451,28 @@
         .pd-related-card { cursor: pointer; }
         /* ===== Phí vận chuyển ===== */
         .free-ship-strip { max-width: 1000px; margin: 0 auto 10px; padding: 8px 15px; background: #fff4d6; border: 1px dashed #e0b93d; border-radius: 8px; text-align: center; font-size: 12.5px; font-weight: 700; color: #8a5a00; }
+        .promo-sec { max-width: 1200px; margin: 14px auto 0; padding: 0 10px; }
+        .promo-head { background: linear-gradient(90deg,#e53935,#ff7043); color:#fff; font-weight:800; padding:10px 14px; border-radius:8px 8px 0 0; font-size:15px; display:flex; justify-content:space-between; align-items:center; }
+        .promo-head small { font-weight:600; opacity:.95; font-size:12px; }
+        .promo-row { display:flex; gap:10px; overflow-x:auto; padding:10px; background:#fff; border:1px solid #f1d6d3; border-top:none; border-radius:0 0 8px 8px; -webkit-overflow-scrolling:touch; }
+        .promo-row img { height:210px; width:auto; border-radius:8px; cursor:pointer; flex:0 0 auto; box-shadow:0 2px 6px rgba(0,0,0,.15); }
+        .promo-lb { display:none; position:fixed; inset:0; background:rgba(0,0,0,.88); z-index:10050; align-items:center; justify-content:center; flex-direction:column; padding:10px; }
+        .promo-lb.show { display:flex; }
+        .promo-lb img { max-width:96vw; max-height:76vh; object-fit:contain; border-radius:8px; }
+        .promo-lb-bar { margin-top:12px; display:flex; gap:10px; flex-wrap:wrap; justify-content:center; }
+        .promo-lb-bar a, .promo-lb-bar button { padding:11px 18px; border:none; border-radius:24px; font-weight:800; font-size:14px; cursor:pointer; text-decoration:none; color:#fff; }
+        .promo-lb-zalo { background:#0068ff; } .promo-lb-nav { background:#555; }
+        .promo-lb-x { position:absolute; top:12px; right:16px; color:#fff; font-size:34px; cursor:pointer; line-height:1; }
+        .grand-pop { display:none; position:fixed; inset:0; background:rgba(0,0,0,.7); z-index:10060; align-items:center; justify-content:center; padding:14px; }
+        .grand-pop.show { display:flex; }
+        .grand-box { position:relative; width:100%; max-width:420px; text-align:center; color:#fff; padding:26px 18px 22px; border-radius:16px; background:radial-gradient(circle at 50% 0%,#ff5252,#c62828 70%); border:3px solid #ffd600; box-shadow:0 10px 40px rgba(0,0,0,.5); }
+        .grand-box .g1 { font-size:34px; font-weight:900; line-height:1.1; color:#ffd600; text-shadow:2px 2px 0 #7f0000; letter-spacing:1px; }
+        .grand-box .g2 { margin-top:10px; font-size:30px; font-weight:900; line-height:1.15; text-shadow:2px 2px 0 #7f0000; }
+        .grand-box .g3 { margin-top:12px; font-size:15px; font-weight:700; }
+        .grand-box .g4 { margin-top:14px; display:inline-block; background:#ffd600; color:#c62828; font-size:22px; font-weight:900; padding:12px 22px; border-radius:40px; text-decoration:none; }
+        .grand-box .g5 { margin-top:12px; font-size:13px; opacity:.95; }
+        .grand-btn { margin-top:10px; background:#fff; color:#c62828; border:none; padding:10px 20px; border-radius:24px; font-weight:800; cursor:pointer; font-size:14px; }
+        .grand-x { position:absolute; top:6px; right:12px; font-size:30px; cursor:pointer; color:#fff; line-height:1; }
         .pay-box { margin-top: 14px; padding: 14px 12px; border: 2px solid #0b5394; border-radius: 10px; background: #f0f7ff; text-align: center; }
         .pay-title { font-size: 14px; font-weight: 800; color: #0b5394; line-height: 1.4; margin-bottom: 10px; }
         .pay-qr { width: 100%; max-width: 260px; height: auto; border-radius: 8px; background: #fff; border: 1px solid #dbe7f5; }
@@ -503,6 +525,12 @@
         <button class="tab-btn" onclick="setCategory('quan-lot-nam')">Quần Lót Nam</button>
     </div>
 
+    <!-- Combo khuyến mãi (ảnh trong images/khuyen-mai) -->
+    <div class="promo-sec" id="promoSec">
+        <div class="promo-head"><span>🔥 COMBO KHUYẾN MÃI KHAI TRƯƠNG</span><small>Bấm vào ảnh để xem lớn</small></div>
+        <div class="promo-row" id="promoRow"></div>
+    </div>
+
     <!-- Main Container -->
     <div class="container" id="productSections">
         <!-- Render tự động qua JS -->
@@ -517,6 +545,30 @@
                 💬 Cần tư vấn kín đáo & giao siêu tốc? Nhắn shop qua Zalo, không ai phán xét bạn.<br>
                 <a href="https://zalo.me/0913553362" target="_blank" rel="noopener" class="btn-zalo-inline"><i class="fa-solid fa-comment-dots"></i> CHAT ZALO NGAY</a>
             </div>
+        </div>
+    </div>
+
+    <!-- Xem ảnh khuyến mãi lớn -->
+    <div class="promo-lb" id="promoLb" onclick="if(event.target===this) closePromo()">
+        <div class="promo-lb-x" onclick="closePromo()">&times;</div>
+        <img id="promoLbImg" alt="Combo khuyến mãi">
+        <div class="promo-lb-bar">
+            <button class="promo-lb-nav" onclick="stepPromo(-1)">‹ Trước</button>
+            <a class="promo-lb-zalo" id="promoLbZalo" target="_blank" rel="noopener">Đặt combo này qua Zalo</a>
+            <button class="promo-lb-nav" onclick="stepPromo(1)">Sau ›</button>
+        </div>
+    </div>
+
+    <!-- Popup khai trương -->
+    <div class="grand-pop" id="grandPop" onclick="if(event.target===this) closeGrandPop()">
+        <div class="grand-box">
+            <div class="grand-x" onclick="closeGrandPop()">&times;</div>
+            <div class="g1">TƯNG BỪNG<br>KHAI TRƯƠNG</div>
+            <div class="g2">SIÊU KHUYẾN MÃI<br>GIẢM GIÁ</div>
+            <div class="g3">Nhiều combo quà tặng · Giao kín đáo</div>
+            <a class="g4" href="tel:0919264150">📞 GỌI ĐẶT HÀNG 0919 264 150</a>
+            <div class="g5">Hoặc nhắn Zalo 0913 553 362</div>
+            <button class="grand-btn" onclick="closeGrandPop(true)">Xem combo khuyến mãi ↓</button>
         </div>
     </div>
 
@@ -947,6 +999,39 @@
             listContainer.innerHTML = listHtml;
             updatePayQR();
         }
+
+        // ===== COMBO KHUYẾN MÃI (ảnh images/khuyen-mai/1.jpg ... N.jpg) =====
+        const PROMO_COUNT = 14;
+        let promoIdx = 1;
+        function initPromo() {
+            const row = document.getElementById('promoRow');
+            if (!row) return;
+            let h = '';
+            for (let i = 1; i <= PROMO_COUNT; i++) {
+                h += '<img loading="lazy" src="images/khuyen-mai/' + i + '.jpg" alt="Combo khuyến mãi ' + i + '" onclick="openPromo(' + i + ')" onerror="this.remove()">';
+            }
+            row.innerHTML = h;
+        }
+        function showPromo() {
+            document.getElementById('promoLbImg').src = 'images/khuyen-mai/' + promoIdx + '.jpg';
+            const msg = 'Em muốn đặt combo khuyến mãi số ' + promoIdx + ' (xem trên web)';
+            document.getElementById('promoLbZalo').href = 'https://zalo.me/' + ZALO_PHONE + '?text=' + encodeURIComponent(msg);
+        }
+        function openPromo(i) { promoIdx = i; showPromo(); document.getElementById('promoLb').classList.add('show'); }
+        function closePromo() { document.getElementById('promoLb').classList.remove('show'); }
+        function stepPromo(d) { promoIdx = ((promoIdx - 1 + d + PROMO_COUNT) % PROMO_COUNT) + 1; showPromo(); }
+
+        // Popup khai trương: hiện 1 lần mỗi lượt vào web
+        function closeGrandPop(goPromo) {
+            document.getElementById('grandPop').classList.remove('show');
+            if (goPromo) { const s = document.getElementById('promoSec'); if (s) s.scrollIntoView({ behavior: 'smooth' }); }
+        }
+        function initGrandPop() {
+            let seen = false;
+            try { seen = sessionStorage.getItem('grandPopSeen') === '1'; sessionStorage.setItem('grandPopSeen', '1'); } catch (e) {}
+            if (!seen) setTimeout(() => document.getElementById('grandPop').classList.add('show'), 800);
+        }
+        document.addEventListener('DOMContentLoaded', function () { initPromo(); initGrandPop(); });
 
         function getGrandTotal() {
             const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
