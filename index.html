@@ -481,6 +481,13 @@
         .grand-box .g5 { margin-top:12px; font-size:13px; opacity:.95; }
         .grand-btn { margin-top:10px; background:#fff; color:#c62828; border:none; padding:10px 20px; border-radius:24px; font-weight:800; cursor:pointer; font-size:14px; }
         .grand-x { position:absolute; top:6px; right:12px; font-size:30px; cursor:pointer; color:#fff; line-height:1; }
+        .ci-main { flex: 1; min-width: 0; }
+        .ci-right { display: flex; align-items: flex-start; gap: 8px; flex-shrink: 0; }
+        .ci-price { color: #666; padding-top: 2px; }
+        .ci-x { width: 26px; height: 26px; border-radius: 50%; border: none; background: #fdeaea; color: #e53935; font-size: 18px; line-height: 1; font-weight: 700; cursor: pointer; flex-shrink: 0; }
+        .ci-qty { display: inline-flex; align-items: center; gap: 8px; margin-top: 6px; }
+        .ci-qty button { width: 26px; height: 26px; border-radius: 6px; border: 1px solid #ccc; background: #fff; font-size: 16px; font-weight: 700; cursor: pointer; line-height: 1; }
+        .ci-qty span { min-width: 18px; text-align: center; font-weight: 700; }
         .pay-box { margin-top: 14px; padding: 14px 12px; border: 2px solid #0b5394; border-radius: 10px; background: #f0f7ff; text-align: center; }
         .pay-title { font-size: 14px; font-weight: 800; color: #0b5394; line-height: 1.4; margin-bottom: 10px; }
         .pay-qr { width: 100%; max-width: 260px; height: auto; border-radius: 8px; background: #fff; border: 1px solid #dbe7f5; }
@@ -983,6 +990,23 @@
             renderCartModal();
         }
 
+        // Xóa 1 sản phẩm khỏi giỏ ngay trong cửa sổ giỏ hàng
+        function removeFromCart(id) {
+            cart = cart.filter(item => item.id !== id);
+            updateCartUI();
+            if (cart.length === 0) { closeCartModal(); } else { renderCartModal(); }
+        }
+        // Tăng / giảm số lượng (tối thiểu 1, muốn bỏ thì bấm dấu ×)
+        function changeCartQty(id, delta) {
+            const item = cart.find(x => x.id === id);
+            if (!item) return;
+            const q = item.quantity + delta;
+            if (q < 1) return;
+            item.quantity = q;
+            updateCartUI();
+            renderCartModal();
+        }
+
         function renderCartModal() {
             const listContainer = document.getElementById('cartItemsList');
             let listHtml = '';
@@ -993,8 +1017,18 @@
                 subtotal += itemTotal;
                 listHtml += `
                     <div class="cart-item-row">
-                        <span><b>${escapeHtml(item.name)}</b> (x${item.quantity})</span>
-                        <span style="color: #666;">${itemTotal.toLocaleString()}đ</span>
+                        <div class="ci-main">
+                            <b>${escapeHtml(item.name)}</b>
+                            <div class="ci-qty">
+                                <button type="button" onclick="changeCartQty(${item.id}, -1)" aria-label="Giảm">−</button>
+                                <span>${item.quantity}</span>
+                                <button type="button" onclick="changeCartQty(${item.id}, 1)" aria-label="Tăng">+</button>
+                            </div>
+                        </div>
+                        <div class="ci-right">
+                            <span class="ci-price">${itemTotal.toLocaleString()}đ</span>
+                            <button type="button" class="ci-x" onclick="removeFromCart(${item.id})" aria-label="Xóa sản phẩm">&times;</button>
+                        </div>
                     </div>
                 `;
             });
