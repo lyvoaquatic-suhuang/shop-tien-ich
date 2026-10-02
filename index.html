@@ -452,6 +452,11 @@
         /* ===== Phí vận chuyển ===== */
         .free-ship-strip { max-width: 1000px; margin: 0 auto 10px; padding: 8px 15px; background: #fff4d6; border: 1px dashed #e0b93d; border-radius: 8px; text-align: center; font-size: 12.5px; font-weight: 700; color: #8a5a00; }
         .promo-sec { max-width: 1200px; margin: 14px auto 0; padding: 0 10px; }
+        .promo-banner { background: linear-gradient(90deg,#e53935,#ff7043); color:#fff; border-radius:10px; padding:14px 16px; text-align:center; box-shadow:0 3px 10px rgba(229,57,53,.3); }
+        .pb-title { font-size:17px; font-weight:900; letter-spacing:.3px; }
+        .pb-text { margin-top:6px; font-size:14px; font-weight:600; line-height:1.45; }
+        .pb-btn { margin-top:10px; background:#ffd600; color:#c62828; border:none; padding:9px 22px; border-radius:22px; font-weight:800; font-size:14px; cursor:pointer; }
+        .wish-line { margin-top:12px; text-align:center; font-size:14px; font-weight:700; color:#c62828; }
         .promo-head { background: linear-gradient(90deg,#e53935,#ff7043); color:#fff; font-weight:800; padding:10px 14px; border-radius:8px 8px 0 0; font-size:15px; display:flex; justify-content:space-between; align-items:center; }
         .promo-head small { font-weight:600; opacity:.95; font-size:12px; }
         .promo-row { display:flex; gap:10px; overflow-x:auto; padding:10px; background:#fff; border:1px solid #f1d6d3; border-top:none; border-radius:0 0 8px 8px; -webkit-overflow-scrolling:touch; }
@@ -516,6 +521,7 @@
     <div class="category-tabs">
         <button class="tab-btn active" onclick="setCategory('all')">Tất cả</button>
         <button class="tab-btn tab-hot" onclick="setCategory('khuyen-mai')">🔥 Khuyến Mãi</button>
+        <button class="tab-btn" onclick="setCategory('combo')">🎁 Combo</button>
         <button class="tab-btn" onclick="setCategory('cuong-cung')">Cương Cứng Nam</button>
         <button class="tab-btn" onclick="setCategory('popper')">Tinh Dầu Popper</button>
         <button class="tab-btn" onclick="setCategory('bao-cao-su')">Bao Cao Su</button>
@@ -525,10 +531,13 @@
         <button class="tab-btn" onclick="setCategory('quan-lot-nam')">Quần Lót Nam</button>
     </div>
 
-    <!-- Combo khuyến mãi (ảnh trong images/khuyen-mai) -->
+    <!-- Banner khuyến mãi -->
     <div class="promo-sec" id="promoSec">
-        <div class="promo-head"><span>🔥 COMBO KHUYẾN MÃI KHAI TRƯƠNG</span><small>Bấm vào ảnh để xem lớn</small></div>
-        <div class="promo-row" id="promoRow"></div>
+        <div class="promo-banner">
+            <div class="pb-title">🎁 COMBO KHUYẾN MÃI KHAI TRƯƠNG</div>
+            <div class="pb-text">Số lượng khuyến mãi có hạn, chỉ đến cuối tháng. Tranh thủ chốt đơn nhé cả nhà!</div>
+            <button type="button" class="pb-btn" onclick="setCategory('combo'); document.getElementById('productSections').scrollIntoView({behavior:'smooth'});">Xem combo ngay ↓</button>
+        </div>
     </div>
 
     <!-- Main Container -->
@@ -554,7 +563,7 @@
         <img id="promoLbImg" alt="Combo khuyến mãi">
         <div class="promo-lb-bar">
             <button class="promo-lb-nav" onclick="stepPromo(-1)">‹ Trước</button>
-            <a class="promo-lb-zalo" id="promoLbZalo" target="_blank" rel="noopener">Đặt combo này qua Zalo</a>
+            <a class="promo-lb-zalo" id="promoLbZalo" target="_blank" rel="noopener">Đặt ưu đãi này qua Zalo</a>
             <button class="promo-lb-nav" onclick="stepPromo(1)">Sau ›</button>
         </div>
     </div>
@@ -565,7 +574,7 @@
             <div class="grand-x" onclick="closeGrandPop()">&times;</div>
             <div class="g1">TƯNG BỪNG<br>KHAI TRƯƠNG</div>
             <div class="g2">SIÊU KHUYẾN MÃI<br>GIẢM GIÁ</div>
-            <div class="g3">Nhiều combo quà tặng · Giao kín đáo</div>
+            <div class="g3">Số lượng khuyến mãi có hạn, chỉ đến cuối tháng.<br>Tranh thủ chốt đơn nhé cả nhà!</div>
             <a class="g4" href="tel:0919264150">📞 GỌI ĐẶT HÀNG 0919 264 150</a>
             <div class="g5">Hoặc nhắn Zalo 0913 553 362</div>
             <button class="grand-btn" onclick="closeGrandPop(true)">Xem combo khuyến mãi ↓</button>
@@ -634,6 +643,7 @@
                     <textarea id="cusNote" class="form-control" rows="2" placeholder="VD: chọn size M, màu đen, giao giờ hành chính..."></textarea>
                 </div>
                 <button type="submit" class="btn-submit">XÁC NHẬN ĐẶT MUA NGAY</button>
+                <div class="wish-line">💐 Chúc cả nhà mua sắm vui vẻ!</div>
             </form>
         </div>
     </div>
@@ -695,6 +705,7 @@
 
         // ===== HIỂN THỊ SẢN PHẨM: khuyến mãi lên đầu, còn lại ngẫu nhiên =====
         const categoryLabels = {
+            'combo': 'Combo Khuyến Mãi',
             'cuong-cung': 'Cương Cứng Nam',
             'popper': 'Tinh Dầu Popper',
             'bao-cao-su': 'Bao Cao Su',
@@ -1001,20 +1012,21 @@
         }
 
         // ===== COMBO KHUYẾN MÃI (ảnh images/khuyen-mai/1.jpg ... N.jpg) =====
-        const PROMO_COUNT = 14;
+        const PROMO_IMAGES = [11, 12, 13]; // ảnh ưu đãi theo số lượng (không có giá cố định) -> nhắn Zalo
+        const PROMO_COUNT = PROMO_IMAGES.length;
         let promoIdx = 1;
         function initPromo() {
             const row = document.getElementById('promoRow');
             if (!row) return;
             let h = '';
             for (let i = 1; i <= PROMO_COUNT; i++) {
-                h += '<img loading="lazy" src="images/khuyen-mai/' + i + '.jpg" alt="Combo khuyến mãi ' + i + '" onclick="openPromo(' + i + ')" onerror="this.remove()">';
+                h += '<img loading="lazy" src="images/khuyen-mai/' + PROMO_IMAGES[i - 1] + '.jpg" alt="Ưu đãi ' + i + '" onclick="openPromo(' + i + ')" onerror="this.remove()">';
             }
             row.innerHTML = h;
         }
         function showPromo() {
-            document.getElementById('promoLbImg').src = 'images/khuyen-mai/' + promoIdx + '.jpg';
-            const msg = 'Em muốn đặt combo khuyến mãi số ' + promoIdx + ' (xem trên web)';
+            document.getElementById('promoLbImg').src = 'images/khuyen-mai/' + PROMO_IMAGES[promoIdx - 1] + '.jpg';
+            const msg = 'Em muốn đặt ưu đãi mua nhiều số ' + PROMO_IMAGES[promoIdx - 1] + ' (xem trên web)';
             document.getElementById('promoLbZalo').href = 'https://zalo.me/' + ZALO_PHONE + '?text=' + encodeURIComponent(msg);
         }
         function openPromo(i) { promoIdx = i; showPromo(); document.getElementById('promoLb').classList.add('show'); }
@@ -1024,7 +1036,7 @@
         // Popup khai trương: hiện 1 lần mỗi lượt vào web
         function closeGrandPop(goPromo) {
             document.getElementById('grandPop').classList.remove('show');
-            if (goPromo) { const s = document.getElementById('promoSec'); if (s) s.scrollIntoView({ behavior: 'smooth' }); }
+            if (goPromo) { if (typeof setCategory === 'function') setCategory('combo'); const s = document.getElementById('productSections'); if (s) s.scrollIntoView({ behavior: 'smooth' }); }
         }
         function initGrandPop() {
             let seen = false;
@@ -1130,7 +1142,7 @@
                 body: data 
             })
             .then(response => {
-                alert('Đặt hàng thành công! Đã gửi thông tin đơn hàng về hệ thống.\nNếu bạn đã chuyển khoản, nhắn ảnh biên lai qua Zalo ' + ZALO_PHONE + ' để shop xử lý nhanh hơn nhé!');
+                alert('Đặt hàng thành công! Đã gửi thông tin đơn hàng về hệ thống.\nChúc cả nhà mua sắm vui vẻ!\nNếu bạn đã chuyển khoản, nhắn ảnh biên lai qua Zalo ' + ZALO_PHONE + ' để shop xử lý nhanh hơn nhé!');
                 cart = [];
                 updateCartUI();
                 closeCartModal();
