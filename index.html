@@ -594,6 +594,16 @@
         </div>
     </div>
 
+    <!-- Màn hình bảo trì (bật/tắt từ Google Sheet) -->
+    <div id="maintOverlay" style="display:none; position:fixed; inset:0; z-index:20000; background:linear-gradient(160deg,#263238,#37474f); color:#fff; align-items:center; justify-content:center; text-align:center; padding:24px;">
+        <div style="max-width:420px;">
+            <div style="font-size:56px;">🔧</div>
+            <div style="font-size:26px; font-weight:900; margin-top:10px;">Website đang bảo trì</div>
+            <div style="margin-top:12px; font-size:15px; line-height:1.6;">Shop sẽ sớm quay lại phục vụ bạn.<br>Cần hỗ trợ gấp, vui lòng nhắn Zalo:</div>
+            <a href="https://zalo.me/0913553362" target="_blank" rel="noopener" style="display:inline-block; margin-top:16px; background:#0068ff; color:#fff; padding:13px 26px; border-radius:30px; font-weight:800; text-decoration:none;">Zalo 0913 553 362</a>
+        </div>
+    </div>
+
     <!-- Hỏi trước khi rời web -->
     <div class="exit-pop" id="exitPop" onclick="if(event.target===this) exitStay()">
         <div class="exit-box">
@@ -873,15 +883,22 @@
             document.querySelectorAll('.pd-thumb').forEach((el, i) => el.classList.toggle('active', i === index));
         }
 
-        // ===== HỎI "BẠN CÓ CHẮC MUỐN RỜI ĐI?" KHI KHÁCH BẤM BACK Ở TRANG CHỦ =====
-        // Hiện đúng 1 lần mỗi lượt vào web (bấm Back lần 2 sẽ thoát bình thường). Hoạt động cả trong trình duyệt của Zalo/Facebook.
+        // ===== CÔNG TẮC BẢO TRÌ (điều khiển từ Google Sheet) =====
+        function setMaintenance(on) {
+            const el = document.getElementById('maintOverlay');
+            if (!el) return;
+            el.style.display = on ? 'flex' : 'none';
+            document.body.style.overflow = on ? 'hidden' : '';
+        }
+
+        // ===== HỎI "BẠN CÓ CHẮC MUỐN RỜI ĐI?" MỖI LẦN KHÁCH BẤM BACK Ở TRANG CHỦ =====
+        // Khách chọn "Ở lại" thì lần Back sau vẫn hỏi lại. Chọn "Rời đi" thì thoát ngay.
         let __exitArmed = false;
-        let __exitDone = false;
-        try { __exitDone = sessionStorage.getItem('exitAsked') === '1'; } catch (e) {}
-        function armExitGuard() {
-            if (__exitArmed || __exitDone) return;
+        function armExitGuard(e) {
+            if (__exitArmed) return;
+            if (e && e.target && e.target.closest && e.target.closest('#exitPop')) return; // bấm trong bảng hỏi thì không tự gắn lại
             __exitArmed = true;
-            try { history.pushState({ layer: 'exit-guard' }, ''); } catch (e) { __exitArmed = false; }
+            try { history.pushState({ layer: 'exit-guard' }, ''); } catch (err) { __exitArmed = false; }
         }
         document.addEventListener('click', armExitGuard, true);
         function showExitModal() {
@@ -890,13 +907,10 @@
         }
         function exitStay() {
             document.getElementById('exitPop').classList.remove('show');
-            __exitDone = true;
-            try { sessionStorage.setItem('exitAsked', '1'); } catch (e) {}
+            armExitGuard(); // gắn lại để lần Back sau vẫn hiện bảng
         }
         function exitLeave() {
             document.getElementById('exitPop').classList.remove('show');
-            __exitDone = true;
-            try { sessionStorage.setItem('exitAsked', '1'); } catch (e) {}
             history.back();
         }
 
@@ -935,7 +949,7 @@
             }
             const name = __layers.pop();
             if (name && __layerHide[name]) { __layerHide[name](); return; }
-            if (__exitArmed && !__exitDone) { __exitArmed = false; showExitModal(); }
+            if (__exitArmed) { __exitArmed = false; showExitModal(); }
         });
 
         function openProductDetail(id) {
@@ -1138,8 +1152,6 @@
                         <div class="pay-banks-title">📱 Cách nhanh nhất trên điện thoại (tự điền đủ số tiền, nội dung):</div>
                         <button type="button" class="pay-save" onclick="saveQrImage()">⬇ 1. Lưu ảnh QR về máy</button>
                         <div class="pay-step">2. Mở app ngân hàng, chọn <b>Quét QR</b>, rồi chọn ảnh vừa lưu trong thư viện. 3. Kiểm tra và bấm xác nhận.</div>
-                        <div class="pay-banks-title" style="margin-top:12px;">Hoặc bấm ngân hàng của bạn để mở app:</div>
-                        <div class="pay-bank-grid">${BANK_APPS.map(b => '<button type="button" class="pay-bank-btn" onclick="openBankApp(\'' + b[0] + '\')">' + b[1] + '</button>').join('')}</div>
                         <div class="pay-toast" id="payToast"></div>
                     </div>
                     <div class="pay-note">Chuyển xong, bạn có thể gửi ảnh biên lai qua <a href="https://zalo.me/${ZALO_PHONE}" target="_blank" rel="noopener">Zalo ${ZALO_PHONE}</a> để được xử lý nhanh hơn. (Không bắt buộc, bạn cũng có thể chọn thanh toán khi nhận hàng.)</div>
@@ -1186,7 +1198,6 @@
         document.addEventListener('DOMContentLoaded', function () { initPromo(); initGrandPop(); });
 
         // ===== MỞ APP NGÂN HÀNG (deeplink VietQR) =====
-        const BANK_APPS = [['vcb','Vietcombank'],['mb','MB Bank'],['tcb','Techcombank'],['bidv','BIDV'],['icb','VietinBank'],['vba','Agribank'],['acb','ACB'],['vpb','VPBank'],['tpb','TPBank'],['hdb','HDBank']];
         function payToast(msg) {
             const t = document.getElementById('payToast');
             if (t) t.textContent = msg;
@@ -1195,19 +1206,6 @@
             if (navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(txt).catch(() => {});
             try { const ta = document.createElement('textarea'); ta.value = txt; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); } catch (e) {}
             return Promise.resolve();
-        }
-        function openBankApp(appId) {
-            const total = getGrandTotal();
-            const phoneEl = document.getElementById('cusPhone');
-            const phone = phoneEl ? phoneEl.value.replace(/\D/g, '') : '';
-            const info = phone ? 'DH ' + phone : 'DAT HANG';
-            copyText(BANK_ACCOUNT);
-            const url = 'https://dl.vietqr.io/pay?app=' + appId
-                + '&ba=' + encodeURIComponent(BANK_ACCOUNT + '@' + BANK_ID.toLowerCase())
-                + '&am=' + total + '&tn=' + encodeURIComponent(info)
-                + '&bn=' + encodeURIComponent(BANK_ACCOUNT_NAME);
-            payToast('Đã sao chép số tài khoản. Đang mở app ngân hàng... Nếu app chưa tự điền, hãy dán số tài khoản và nhập số tiền ' + total.toLocaleString() + 'đ, nội dung: ' + info);
-            window.open(url, '_blank', 'noopener');
         }
         async function saveQrImage() {
             const img = document.getElementById('payQrImg');
@@ -1622,10 +1620,17 @@
 
                 const get = (r, i) => (i >= 0 && r[i] !== undefined) ? r[i].trim() : '';
                 const newProducts = [];
+                let maintenanceOn = false;
                 for (let i = 1; i < rows.length; i++) {
                     const r = rows[i];
                     const name = get(r, idx.name);
                     if (!name) continue;
+                    // Dòng điều khiển bảo trì: Tên = "BAO TRI", ô Giá Bán ghi x / 1 / bat = TẮT web, ghi 0 / tat / để trống = MỞ web
+                    if (normalizeText(name) === 'bao tri') {
+                        const flag = get(r, idx.price);
+                        maintenanceOn = isTruthyCell(flag) || normalizeText(flag).trim() === 'bat';
+                        continue;
+                    }
                     const images = [get(r, idx.img1), get(r, idx.img2), get(r, idx.img3)].filter(Boolean);
                     const price = parseMoney(get(r, idx.price));
                     const oldPriceCell = idx.oldPrice !== -1 ? get(r, idx.oldPrice) : '';
@@ -1656,6 +1661,8 @@
                         tags: get(r, idx.tags) || ''
                     });
                 }
+
+                setMaintenance(maintenanceOn);
 
                 if (newProducts.length) {
                     products = newProducts;
