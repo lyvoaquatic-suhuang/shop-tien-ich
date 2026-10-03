@@ -488,6 +488,22 @@
         .ci-qty { display: inline-flex; align-items: center; gap: 8px; margin-top: 6px; }
         .ci-qty button { width: 26px; height: 26px; border-radius: 6px; border: 1px solid #ccc; background: #fff; font-size: 16px; font-weight: 700; cursor: pointer; line-height: 1; }
         .ci-qty span { min-width: 18px; text-align: center; font-weight: 700; }
+        .exit-pop { display:none; position:fixed; inset:0; background:rgba(0,0,0,.65); z-index:10070; align-items:center; justify-content:center; padding:16px; }
+        .exit-pop.show { display:flex; }
+        .exit-box { width:100%; max-width:360px; background:#fff; border-radius:16px; padding:22px 18px 16px; text-align:center; box-shadow:0 10px 40px rgba(0,0,0,.4); }
+        .exit-t { font-size:22px; font-weight:900; color:#c62828; }
+        .exit-d { margin-top:8px; font-size:14.5px; color:#333; line-height:1.5; }
+        .exit-stay { margin-top:14px; width:100%; padding:13px; border:none; border-radius:28px; background:#ffd600; color:#c62828; font-weight:900; font-size:16px; cursor:pointer; }
+        .exit-zalo { display:block; margin-top:10px; padding:11px; border-radius:28px; background:#0068ff; color:#fff; font-weight:800; font-size:14px; text-decoration:none; }
+        .exit-leave { margin-top:10px; background:none; border:none; color:#888; font-size:14px; cursor:pointer; padding:8px; }
+        .pay-banks { display:none; margin-top:12px; }
+        @media (pointer: coarse) { .pay-banks { display:block; } }
+        .pay-banks-title { font-size:13px; font-weight:800; color:#0b5394; margin-bottom:8px; }
+        .pay-save { width:100%; padding:13px; border:none; border-radius:10px; background:#0b5394; color:#fff; font-weight:800; font-size:14.5px; cursor:pointer; }
+        .pay-step { margin-top:8px; font-size:12.5px; color:#444; line-height:1.5; text-align:left; }
+        .pay-bank-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:8px; }
+        .pay-bank-btn { padding:11px 6px; border:1.5px solid #0b5394; background:#fff; color:#0b5394; border-radius:10px; font-weight:800; font-size:13px; cursor:pointer; }
+        .pay-toast { margin-top:8px; font-size:12.5px; color:#2e7d32; font-weight:700; min-height:16px; }
         .pay-box { margin-top: 14px; padding: 14px 12px; border: 2px solid #0b5394; border-radius: 10px; background: #f0f7ff; text-align: center; }
         .pay-title { font-size: 14px; font-weight: 800; color: #0b5394; line-height: 1.4; margin-bottom: 10px; }
         .pay-qr { width: 100%; max-width: 260px; height: auto; border-radius: 8px; background: #fff; border: 1px solid #dbe7f5; }
@@ -575,6 +591,17 @@
             <button class="promo-lb-nav" onclick="stepPromo(-1)">‹ Trước</button>
             <a class="promo-lb-zalo" id="promoLbZalo" target="_blank" rel="noopener">Đặt ưu đãi này qua Zalo</a>
             <button class="promo-lb-nav" onclick="stepPromo(1)">Sau ›</button>
+        </div>
+    </div>
+
+    <!-- Hỏi trước khi rời web -->
+    <div class="exit-pop" id="exitPop" onclick="if(event.target===this) exitStay()">
+        <div class="exit-box">
+            <div class="exit-t">Khoan đã! 🎁</div>
+            <div class="exit-d">Combo khai trương chỉ đến cuối tháng, số lượng có hạn.<br>Bạn có chắc muốn rời đi?</div>
+            <button class="exit-stay" onclick="exitStay()">Ở lại xem tiếp</button>
+            <a class="exit-zalo" href="https://zalo.me/0913553362" target="_blank" rel="noopener">Nhắn Zalo để được tư vấn</a>
+            <button class="exit-leave" onclick="exitLeave()">Rời đi</button>
         </div>
     </div>
 
@@ -846,24 +873,32 @@
             document.querySelectorAll('.pd-thumb').forEach((el, i) => el.classList.toggle('active', i === index));
         }
 
-        // ===== HỎI "RỜI KHỎI TRANG WEB?" KHI KHÁCH ĐỊNH THOÁT =====
-        // Hộp thoại này do trình duyệt tự hiện (nội dung không đổi được). Không hiện khi khách bấm gọi điện / mở Zalo.
-        let __allowLeave = false;
-        document.addEventListener('click', function (e) {
-            const a = e.target.closest ? e.target.closest('a') : null;
-            if (!a) return;
-            const h = a.getAttribute('href') || '';
-            if (a.target === '_blank' || /^(tel:|mailto:|sms:)/i.test(h)) {
-                __allowLeave = true;
-                setTimeout(() => { __allowLeave = false; }, 2500);
-            }
-        }, true);
-        window.addEventListener('beforeunload', function (e) {
-            if (__allowLeave) return;
-            e.preventDefault();
-            e.returnValue = '';
-            return '';
-        });
+        // ===== HỎI "BẠN CÓ CHẮC MUỐN RỜI ĐI?" KHI KHÁCH BẤM BACK Ở TRANG CHỦ =====
+        // Hiện đúng 1 lần mỗi lượt vào web (bấm Back lần 2 sẽ thoát bình thường). Hoạt động cả trong trình duyệt của Zalo/Facebook.
+        let __exitArmed = false;
+        let __exitDone = false;
+        try { __exitDone = sessionStorage.getItem('exitAsked') === '1'; } catch (e) {}
+        function armExitGuard() {
+            if (__exitArmed || __exitDone) return;
+            __exitArmed = true;
+            try { history.pushState({ layer: 'exit-guard' }, ''); } catch (e) { __exitArmed = false; }
+        }
+        document.addEventListener('click', armExitGuard, true);
+        function showExitModal() {
+            const m = document.getElementById('exitPop');
+            if (m) m.classList.add('show');
+        }
+        function exitStay() {
+            document.getElementById('exitPop').classList.remove('show');
+            __exitDone = true;
+            try { sessionStorage.setItem('exitAsked', '1'); } catch (e) {}
+        }
+        function exitLeave() {
+            document.getElementById('exitPop').classList.remove('show');
+            __exitDone = true;
+            try { sessionStorage.setItem('exitAsked', '1'); } catch (e) {}
+            history.back();
+        }
 
         // ===== NÚT QUAY LẠI (BACK) TRÊN ĐIỆN THOẠI =====
         // Mỗi cửa sổ (chi tiết sản phẩm, giỏ hàng, bài viết, popup) khi mở sẽ thêm 1 mục vào lịch sử trình duyệt,
@@ -899,7 +934,8 @@
                 return;
             }
             const name = __layers.pop();
-            if (name && __layerHide[name]) __layerHide[name]();
+            if (name && __layerHide[name]) { __layerHide[name](); return; }
+            if (__exitArmed && !__exitDone) { __exitArmed = false; showExitModal(); }
         });
 
         function openProductDetail(id) {
@@ -1098,6 +1134,14 @@
                         <span id="payAmountText"></span>
                     </div>
                     <button type="button" class="pay-copy" onclick="copyBankAccount(this)"><i class="fa-regular fa-copy"></i> Sao chép số tài khoản</button>
+                    <div class="pay-banks">
+                        <div class="pay-banks-title">📱 Cách nhanh nhất trên điện thoại (tự điền đủ số tiền, nội dung):</div>
+                        <button type="button" class="pay-save" onclick="saveQrImage()">⬇ 1. Lưu ảnh QR về máy</button>
+                        <div class="pay-step">2. Mở app ngân hàng, chọn <b>Quét QR</b>, rồi chọn ảnh vừa lưu trong thư viện. 3. Kiểm tra và bấm xác nhận.</div>
+                        <div class="pay-banks-title" style="margin-top:12px;">Hoặc bấm ngân hàng của bạn để mở app:</div>
+                        <div class="pay-bank-grid">${BANK_APPS.map(b => '<button type="button" class="pay-bank-btn" onclick="openBankApp(\'' + b[0] + '\')">' + b[1] + '</button>').join('')}</div>
+                        <div class="pay-toast" id="payToast"></div>
+                    </div>
                     <div class="pay-note">Chuyển xong, bạn có thể gửi ảnh biên lai qua <a href="https://zalo.me/${ZALO_PHONE}" target="_blank" rel="noopener">Zalo ${ZALO_PHONE}</a> để được xử lý nhanh hơn. (Không bắt buộc, bạn cũng có thể chọn thanh toán khi nhận hàng.)</div>
                 </div>
             `;
@@ -1140,6 +1184,47 @@
             if (!seen) setTimeout(() => { document.getElementById('grandPop').classList.add('show'); layerOpen('grand'); }, 800);
         }
         document.addEventListener('DOMContentLoaded', function () { initPromo(); initGrandPop(); });
+
+        // ===== MỞ APP NGÂN HÀNG (deeplink VietQR) =====
+        const BANK_APPS = [['vcb','Vietcombank'],['mb','MB Bank'],['tcb','Techcombank'],['bidv','BIDV'],['icb','VietinBank'],['vba','Agribank'],['acb','ACB'],['vpb','VPBank'],['tpb','TPBank'],['hdb','HDBank']];
+        function payToast(msg) {
+            const t = document.getElementById('payToast');
+            if (t) t.textContent = msg;
+        }
+        function copyText(txt) {
+            if (navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(txt).catch(() => {});
+            try { const ta = document.createElement('textarea'); ta.value = txt; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); } catch (e) {}
+            return Promise.resolve();
+        }
+        function openBankApp(appId) {
+            const total = getGrandTotal();
+            const phoneEl = document.getElementById('cusPhone');
+            const phone = phoneEl ? phoneEl.value.replace(/\D/g, '') : '';
+            const info = phone ? 'DH ' + phone : 'DAT HANG';
+            copyText(BANK_ACCOUNT);
+            const url = 'https://dl.vietqr.io/pay?app=' + appId
+                + '&ba=' + encodeURIComponent(BANK_ACCOUNT + '@' + BANK_ID.toLowerCase())
+                + '&am=' + total + '&tn=' + encodeURIComponent(info)
+                + '&bn=' + encodeURIComponent(BANK_ACCOUNT_NAME);
+            payToast('Đã sao chép số tài khoản. Đang mở app ngân hàng... Nếu app chưa tự điền, hãy dán số tài khoản và nhập số tiền ' + total.toLocaleString() + 'đ, nội dung: ' + info);
+            window.open(url, '_blank', 'noopener');
+        }
+        async function saveQrImage() {
+            const img = document.getElementById('payQrImg');
+            if (!img) return;
+            try {
+                const res = await fetch(img.src);
+                const blob = await res.blob();
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = 'qr-chuyen-khoan.png';
+                document.body.appendChild(a); a.click(); a.remove();
+                payToast('Đã lưu ảnh QR. Mở app ngân hàng, chọn Quét QR rồi chọn ảnh từ thư viện.');
+            } catch (e) {
+                window.open(img.src, '_blank', 'noopener');
+                payToast('Nhấn giữ vào ảnh QR vừa mở để lưu, rồi quét trong app ngân hàng.');
+            }
+        }
 
         function getGrandTotal() {
             const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
