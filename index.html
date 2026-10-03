@@ -846,6 +846,25 @@
             document.querySelectorAll('.pd-thumb').forEach((el, i) => el.classList.toggle('active', i === index));
         }
 
+        // ===== HỎI "RỜI KHỎI TRANG WEB?" KHI KHÁCH ĐỊNH THOÁT =====
+        // Hộp thoại này do trình duyệt tự hiện (nội dung không đổi được). Không hiện khi khách bấm gọi điện / mở Zalo.
+        let __allowLeave = false;
+        document.addEventListener('click', function (e) {
+            const a = e.target.closest ? e.target.closest('a') : null;
+            if (!a) return;
+            const h = a.getAttribute('href') || '';
+            if (a.target === '_blank' || /^(tel:|mailto:|sms:)/i.test(h)) {
+                __allowLeave = true;
+                setTimeout(() => { __allowLeave = false; }, 2500);
+            }
+        }, true);
+        window.addEventListener('beforeunload', function (e) {
+            if (__allowLeave) return;
+            e.preventDefault();
+            e.returnValue = '';
+            return '';
+        });
+
         // ===== NÚT QUAY LẠI (BACK) TRÊN ĐIỆN THOẠI =====
         // Mỗi cửa sổ (chi tiết sản phẩm, giỏ hàng, bài viết, popup) khi mở sẽ thêm 1 mục vào lịch sử trình duyệt,
         // nên bấm Back sẽ đóng cửa sổ đó thay vì thoát khỏi website.
@@ -1329,6 +1348,25 @@
                 "Bạn có thể mở lời nhẹ nhàng, ví dụ: “Mình hay dùng bao và xét nghiệm định kỳ, bạn thì sao?”. Nói sớm, trước khi mọi thứ trở nên nóng.",
                 "Đồng thuận phải rõ ràng và có thể rút lại bất cứ lúc nào. Không ai phải làm điều mình không muốn, và say rượu không phải là sự đồng thuận.",
                 "Chuẩn bị sẵn bao cao su và gel bôi trơn, ưu tiên gặp ở nơi an toàn, và báo cho một người bạn tin cậy biết bạn đi đâu nếu gặp người mới quen qua mạng."
+              ] },
+            { img: "images/bai-11.jpg", icon: "fa-shield-heart", colors: ["#e53935", "#ff8a65"], cat: "bao-cao-su",
+              title: "Chọn Bao Cao Su Đúng Size, Đúng Loại: 5 Điều Cần Biết",
+              sum: "Vừa size, đúng chất liệu và dùng đúng cách mới bảo vệ được bạn...",
+              body: [
+                "Bao cao su vừa vặn quan trọng hơn bạn nghĩ. Quá chật dễ rách và gây khó chịu, quá rộng dễ tuột. Hãy chọn theo bản rộng ghi trên hộp (thường khoảng 49 đến 56 mm), nếu không chắc thì bắt đầu với size tiêu chuẩn rồi điều chỉnh ở lần mua sau.",
+                "Mỏng hay thường là chuyện cảm nhận cá nhân, còn độ an toàn phụ thuộc vào hàng chính hãng, còn hạn sử dụng và được bảo quản đúng. Luôn kiểm tra ngày hết hạn và vỏ gói còn nguyên, không bị xì hơi hay rách.",
+                "Bao cao su latex chỉ dùng với gel bôi trơn gốc nước hoặc silicone. Dầu, kem dưỡng hay vaseline làm hỏng latex rất nhanh. Dùng đủ gel cũng giúp giảm ma sát, hạn chế rách.",
+                "Mỗi lần dùng một chiếc, không dùng lại. Đeo từ đầu, trước mọi sự tiếp xúc, và giữ phần gốc khi rút ra để không bị tuột. Cất bao ở nơi mát, tránh túi quần, ví hay trong xe dưới nắng nóng.",
+                "Bao cao su là cách đơn giản nhất vừa tránh thai ngoài ý muốn vừa giảm nguy cơ các bệnh lây qua đường tình dục. Nên có sẵn vài chiếc, đừng đợi đến phút cuối mới đi tìm."
+              ] },
+            { img: "images/bai-12.jpg", icon: "fa-shirt", colors: ["#1565c0", "#42a5f5"], cat: "quan-lot-nam",
+              title: "Chọn Quần Lót Nam Đúng Size, Mặc Thoải Mái Cả Ngày",
+              sum: "Theo cân nặng, chất liệu và kiểu dáng: cách chọn nhanh để không bị chật, bí...",
+              body: [
+                "Chọn size theo cân nặng là cách nhanh nhất: M cho người dưới 55kg, L dưới 65kg, XL dưới 75kg và XXL dưới 85kg. Nếu bạn nằm giữa hai size hoặc ưu tiên thoải mái, hãy chọn size lớn hơn. Quần chật dễ để lại hằn và gây bí.",
+                "Về chất liệu, cotton và modal thoáng, thấm mồ hôi tốt, hợp mặc hằng ngày. Loại lưới hoặc vải mỏng nhẹ hợp mùa nóng hoặc khi cần cảm giác nhẹ. Nếu da bạn dễ kích ứng, nên ưu tiên đường may mềm và không có nhãn cứng cọ vào da.",
+                "Kiểu dáng tùy nhu cầu: tam giác gọn gàng cho công việc thường ngày, jockstrap và G-string cho cảm giác thoáng và ôm gọn, bikini nằm giữa hai kiểu đó. Không có kiểu nào đúng cho tất cả, quan trọng là bạn thấy thoải mái khi vận động.",
+                "Quần lót nên thay mỗi ngày, giặt sạch bằng nước ấm và xà phòng dịu nhẹ, tránh ngâm lâu với chất tẩy mạnh. Phơi nơi thoáng, và thay mới khi vải đã giãn hoặc bạc màu để luôn thoải mái."
               ] }
         ];
 
