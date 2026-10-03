@@ -497,6 +497,16 @@
         .exit-zalo { display:block; margin-top:10px; padding:11px; border-radius:28px; background:#0068ff; color:#fff; font-weight:800; font-size:14px; text-decoration:none; }
         .exit-leave { margin-top:10px; background:none; border:none; color:#888; font-size:14px; cursor:pointer; padding:8px; }
         .pay-banks { display:block; margin-top:12px; }
+        .qr-save { display:none; position:fixed; inset:0; background:rgba(0,0,0,.75); z-index:10080; align-items:center; justify-content:center; padding:14px; overflow-y:auto; }
+        .qr-save.show { display:flex; }
+        .qr-save-box { position:relative; width:100%; max-width:380px; background:#fff; border-radius:16px; padding:18px 16px 16px; text-align:center; }
+        .qr-save-x { position:absolute; top:6px; right:12px; font-size:30px; color:#888; cursor:pointer; line-height:1; }
+        .qr-save-t { font-size:18px; font-weight:900; color:#0b5394; margin-bottom:10px; }
+        .qr-save-box img { width:100%; max-width:320px; height:auto; border-radius:8px; border:1px solid #dbe7f5; -webkit-touch-callout:default; user-select:auto; }
+        .qr-save-d { margin-top:10px; font-size:13.5px; color:#333; line-height:1.55; text-align:left; }
+        .qr-save-b1 { margin-top:12px; width:100%; padding:12px; border:none; border-radius:10px; background:#0b5394; color:#fff; font-weight:800; font-size:14.5px; cursor:pointer; }
+        .qr-save-b2 { margin-top:8px; width:100%; padding:11px; border:1.5px solid #0b5394; border-radius:10px; background:#fff; color:#0b5394; font-weight:800; font-size:14px; cursor:pointer; }
+        .qr-save-m { margin-top:8px; font-size:12.5px; color:#c62828; font-weight:700; min-height:16px; }
         .pay-banks-title { font-size:13px; font-weight:800; color:#0b5394; margin-bottom:8px; }
         .pay-save { width:100%; padding:13px; border:none; border-radius:10px; background:#0b5394; color:#fff; font-weight:800; font-size:14.5px; cursor:pointer; }
         .pay-step { margin-top:8px; font-size:12.5px; color:#444; line-height:1.5; text-align:left; }
@@ -590,6 +600,19 @@
             <button class="promo-lb-nav" onclick="stepPromo(-1)">‹ Trước</button>
             <a class="promo-lb-zalo" id="promoLbZalo" target="_blank" rel="noopener">Đặt ưu đãi này qua Zalo</a>
             <button class="promo-lb-nav" onclick="stepPromo(1)">Sau ›</button>
+        </div>
+    </div>
+
+    <!-- Lưu ảnh QR -->
+    <div class="qr-save" id="qrSaveOverlay" onclick="if(event.target===this) closeQrSave()">
+        <div class="qr-save-box">
+            <div class="qr-save-x" onclick="closeQrSave()">&times;</div>
+            <div class="qr-save-t">Lưu ảnh QR về máy</div>
+            <img id="qrSaveImg" alt="Mã QR chuyển khoản">
+            <div class="qr-save-d"><b>Nhấn giữ vào ảnh QR</b> rồi chọn <b>"Lưu hình ảnh"</b> (hoặc "Tải hình ảnh xuống"). Sau đó mở app ngân hàng, chọn <b>Quét QR</b> và chọn ảnh vừa lưu.</div>
+            <button type="button" class="qr-save-b1" id="qrShareBtn" onclick="shareQr()">Chia sẻ / Lưu ảnh</button>
+            <button type="button" class="qr-save-b2" onclick="downloadQr()">Tải xuống</button>
+            <div class="qr-save-m" id="qrSaveMsg"></div>
         </div>
     </div>
 
@@ -936,6 +959,7 @@
             pd: () => { document.getElementById('productDetailModal').style.display = 'none'; },
             cart: () => { document.getElementById('checkoutModal').style.display = 'none'; },
             article: () => { document.getElementById('articleModal').style.display = 'none'; },
+            qr: () => { document.getElementById('qrSaveOverlay').classList.remove('show'); },
             grand: () => { document.getElementById('grandPop').classList.remove('show'); }
         };
         window.addEventListener('popstate', function () {
@@ -1206,20 +1230,51 @@
             try { const ta = document.createElement('textarea'); ta.value = txt; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); } catch (e) {}
             return Promise.resolve();
         }
-        async function saveQrImage() {
+        // Lưu ảnh QR: trình duyệt trong Zalo/Facebook thường chặn tải file, nên mở khung xem ảnh lớn
+        // để khách "nhấn giữ vào ảnh để lưu" (cách chắc chắn nhất), kèm nút Chia sẻ / Tải xuống.
+        async function qrBlob() {
+            const img = document.getElementById('payQrImg');
+            const res = await fetch(img.src);
+            return await res.blob();
+        }
+        function saveQrImage() {
             const img = document.getElementById('payQrImg');
             if (!img) return;
+            document.getElementById('qrSaveImg').src = img.src;
+            const canShare = !!(navigator.canShare && navigator.share);
+            document.getElementById('qrShareBtn').style.display = canShare ? 'block' : 'none';
+            document.getElementById('qrSaveMsg').textContent = '';
+            document.getElementById('qrSaveOverlay').classList.add('show');
+            layerOpen('qr');
+        }
+        function closeQrSave() {
+            document.getElementById('qrSaveOverlay').classList.remove('show');
+            layerClosedByUI('qr');
+        }
+        async function shareQr() {
             try {
-                const res = await fetch(img.src);
-                const blob = await res.blob();
+                const blob = await qrBlob();
+                const file = new File([blob], 'qr-chuyen-khoan.png', { type: blob.type || 'image/png' });
+                if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                    await navigator.share({ files: [file], title: 'QR chuyển khoản' });
+                } else {
+                    document.getElementById('qrSaveMsg').textContent = 'Máy này chưa hỗ trợ chia sẻ ảnh. Hãy nhấn giữ vào ảnh QR ở trên để lưu.';
+                }
+            } catch (e) {
+                if (e && e.name === 'AbortError') return;
+                document.getElementById('qrSaveMsg').textContent = 'Chưa chia sẻ được. Hãy nhấn giữ vào ảnh QR ở trên để lưu.';
+            }
+        }
+        async function downloadQr() {
+            try {
+                const blob = await qrBlob();
                 const a = document.createElement('a');
                 a.href = URL.createObjectURL(blob);
                 a.download = 'qr-chuyen-khoan.png';
                 document.body.appendChild(a); a.click(); a.remove();
-                payToast('Đã lưu ảnh QR. Mở app ngân hàng, chọn Quét QR rồi chọn ảnh từ thư viện.');
+                document.getElementById('qrSaveMsg').textContent = 'Đã gửi lệnh tải xuống. Nếu không thấy ảnh trong máy, hãy nhấn giữ vào ảnh QR ở trên để lưu.';
             } catch (e) {
-                window.open(img.src, '_blank', 'noopener');
-                payToast('Nhấn giữ vào ảnh QR vừa mở để lưu, rồi quét trong app ngân hàng.');
+                document.getElementById('qrSaveMsg').textContent = 'Chưa tải được. Hãy nhấn giữ vào ảnh QR ở trên để lưu.';
             }
         }
 
